@@ -6,7 +6,7 @@ import { ErrorCodes } from '../utils/errors/errorCodes';
 export const errorHandler = (error: Error, req: Request, res: Response, _next: NextFunction): Response => {
   ErrorLogger.log(error, `${req.method} ${req.path}`);
 
-  const requestId = (req as any).id || (req as any).requestId || 'unknown';
+  const requestId = (req as any).requestId || 'unknown';
   const timestamp = new Date().toISOString();
   const meta = { timestamp, requestId };
 

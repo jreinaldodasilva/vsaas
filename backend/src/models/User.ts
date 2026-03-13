@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
 import { authMixin } from './mixins/authMixin';
 import { baseSchemaFields, baseSchemaOptions } from './base/baseSchema';
@@ -6,7 +6,7 @@ import { baseSchemaFields, baseSchemaOptions } from './base/baseSchema';
 // TODO: Import UserRole from @vsaas/types or your domain types
 const USER_ROLES = ['super_admin', 'admin', 'manager', 'staff'] as const;
 
-const UserSchema = new Schema<Document>({
+const UserSchema = new Schema({
   name: {
     type: String,
     required: [true, 'Nome é obrigatório'],

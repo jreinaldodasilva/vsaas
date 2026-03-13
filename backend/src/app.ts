@@ -115,7 +115,6 @@ app.use('/api', apiLimiter);
 app.use((req: Request, res: Response, next: NextFunction) => {
   const raw = req.headers['x-request-id'] as string | undefined;
   const requestId = raw ? raw.replace(/[^\w\-]/g, '').slice(0, 64) || uuidv4() : uuidv4();
-  (req as any).id = requestId;
   (req as any).requestId = requestId;
   res.setHeader('X-Request-ID', requestId);
   next();

@@ -25,7 +25,7 @@ export const responseWrapper = (req: Request, res: Response, next: NextFunction)
     if (res.statusCode >= 200 && res.statusCode < 300) {
       const meta = {
         timestamp: new Date().toISOString(),
-        requestId: (req as any).id ? String((req as any).id) : 'unknown',
+        requestId: (req as any).requestId || 'unknown',
         version: 'v1',
       };
       const normalized = normalizeIds(payload?.data ?? payload);

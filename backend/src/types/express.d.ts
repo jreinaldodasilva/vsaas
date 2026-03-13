@@ -1,13 +1,12 @@
-import 'express';
+import 'express-serve-static-core';
 
-declare module 'express' {
+declare module 'express-serve-static-core' {
   interface Request {
     pagination?: {
       page: number;
       limit: number;
       skip: number;
     };
-    id?: string;
     requestId?: string;
   }
 }

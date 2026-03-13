@@ -1,5 +1,5 @@
 import { http } from '../http';
-import type { User, LoginRequest, LoginResponse } from '@vsaas/types';
+import type { User, LoginRequest } from '@vsaas/types';
 
 export const authService = {
   login: (data: LoginRequest) =>

@@ -14,7 +14,7 @@ export const idempotencyMiddleware = async (req: Request, res: Response, next: N
       success: false,
       data: null,
       error: { code: 'VAL_INVALID_INPUT', message: 'Idempotency-Key must be a valid UUID v4' },
-      meta: { timestamp: new Date().toISOString(), requestId: (req as any).id || 'unknown', version: 'v1' },
+      meta: { timestamp: new Date().toISOString(), requestId: (req as any).requestId || 'unknown', version: 'v1' },
     });
   }
 
