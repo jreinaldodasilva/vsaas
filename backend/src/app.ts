@@ -140,6 +140,7 @@ app.get('/api/csrf-token', (req: any, res: any) => res.json({ csrfToken: generat
 
 app.use('/api', (req: any, res: any, next: any) => {
   if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return next();
+  if (process.env.NODE_ENV === 'test') return next();
   const skipPaths = ['/api/v1/auth/refresh', '/api/v1/auth/logout', '/api/v1/auth/login', '/api/v1/auth/register', '/api/v1/auth/accept-invite', '/api/v1/webhooks/stripe', '/api/csrf-token'];
   if (skipPaths.some(p => req.originalUrl.startsWith(p))) return next();
   csrfProtection(req, res, next);

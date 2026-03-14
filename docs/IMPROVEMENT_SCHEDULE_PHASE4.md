@@ -54,9 +54,9 @@ Cover critical flows that currently have no tests.
 
 | # | Item | Priority | Status |
 |---|------|----------|--------|
-| 17.1 | **Invitation flow integration tests** — Test `POST /tenants/:id/invite` and `POST /auth/accept-invite`. | Low | ⬜ |
-| 17.2 | **User management route tests** — Test `GET/PATCH/DELETE /users` with tenant scoping. | Low | ⬜ |
-| 17.3 | **Email template unit tests** — Verify each template returns valid HTML with expected variables. | Low | ⬜ |
+| 17.1 | **Invitation flow integration tests** — Test `POST /tenants/:id/invite` and `POST /auth/accept-invite`. | Low | ✅ |
+| 17.2 | **User management route tests** — Test `GET/PATCH/DELETE /users` with tenant scoping. | Low | ✅ |
+| 17.3 | **Email template unit tests** — Verify each template returns valid HTML with expected variables. | Low | ✅ |
 
 ---
 
