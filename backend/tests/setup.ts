@@ -1,5 +1,9 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import path from 'path';
+
+dotenv.config({ path: path.resolve(__dirname, '../.env.test') });
 
 let mongod: MongoMemoryServer;
 
@@ -20,6 +24,10 @@ afterAll(async () => {
   try {
     const { emailQueue } = await import('../src/queues/emailQueue');
     await emailQueue.close().catch(() => {});
+  } catch {}
+  try {
+    const { auditCleanupQueue } = await import('../src/queues/auditCleanupQueue');
+    await auditCleanupQueue.close().catch(() => {});
   } catch {}
 });
 

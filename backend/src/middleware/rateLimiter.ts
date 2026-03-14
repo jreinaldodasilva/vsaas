@@ -43,6 +43,10 @@ export const apiLimiter = createRateLimiter({
   max: process.env.NODE_ENV === 'production' ? RATE_LIMIT.API_MAX : 1000,
   message: 'Muitas requisições. Tente novamente em 15 minutos.',
   prefix: 'api',
+  keyGenerator: (req) => {
+    const tenantId = (req as AuthenticatedRequest).user?.tenantId;
+    return tenantId ? `tenant_${tenantId}:${req.ip}` : `ip_${req.ip}`;
+  },
 });
 
 export const authLimiter = createRateLimiter({

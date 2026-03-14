@@ -15,9 +15,6 @@ jest.mock('../../../src/platform/events', () => ({
 }));
 
 describe('TenantService', () => {
-  // bcrypt hashing is slow in test — increase timeout for create tests
-  jest.setTimeout(15000);
-
   describe('create', () => {
     it('creates a tenant and owner user', async () => {
       const result = await tenantService.create({

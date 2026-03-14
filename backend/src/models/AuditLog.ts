@@ -46,7 +46,7 @@ const AuditLogSchema = new Schema<IAuditLog & Document>({
 });
 
 AuditLogSchema.index({ createdAt: -1 });
-AuditLogSchema.index({ createdAt: 1 }, { expireAfterSeconds: 7776000 }); // TTL: 90 days
+AuditLogSchema.index({ createdAt: 1 }, { expireAfterSeconds: parseInt(process.env.AUDIT_LOG_TTL_DAYS || '90', 10) * 86400 });
 AuditLogSchema.index({ user: 1, createdAt: -1 });
 AuditLogSchema.index({ tenantId: 1, createdAt: -1 });
 AuditLogSchema.index({ action: 1, createdAt: -1 });

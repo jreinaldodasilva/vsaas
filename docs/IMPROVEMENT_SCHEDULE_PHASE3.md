@@ -42,10 +42,10 @@ Fix resource leaks, improve test reliability, and add production safeguards.
 
 | # | Item | Priority | Status |
 |---|------|----------|--------|
-| 12.1 | **Refactor TokenBlacklistService** — Replace private Redis connection with shared `redisClient`. Eliminates resource leak and shutdown gap. | Medium | ⬜ |
-| 12.2 | **Add `.env.test`** — Test-specific env file with deterministic secrets and `VERIFY_USER_ON_REQUEST=false`. Reference in jest setup. | Medium | ⬜ |
-| 12.3 | **Audit log retention** — BullMQ repeatable job that deletes audit logs older than N days. Add TTL index on `createdAt`. | Medium | ⬜ |
-| 12.4 | **Rate limiter per-tenant** — Add tenant-aware key generator so one tenant can't exhaust rate limits for others behind shared IPs. | Medium | ⬜ |
+| 12.1 | **Refactor TokenBlacklistService** — Replace private Redis connection with shared `redisClient`. Eliminates resource leak and shutdown gap. | Medium | ✅ |
+| 12.2 | **Add `.env.test`** — Test-specific env file with deterministic secrets and `VERIFY_USER_ON_REQUEST=false`. Reference in jest setup. | Medium | ✅ |
+| 12.3 | **Audit log retention** — BullMQ repeatable job that deletes audit logs older than N days. Add TTL index on `createdAt`. | Medium | ✅ |
+| 12.4 | **Rate limiter per-tenant** — Add tenant-aware key generator so one tenant can't exhaust rate limits for others behind shared IPs. | Medium | ✅ |
 
 ---
 

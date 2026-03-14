@@ -21,7 +21,6 @@ const InviteTokenSchema = new Schema<IInviteToken>({
   acceptedAt: Date,
 }, { timestamps: true });
 
-InviteTokenSchema.index({ token: 1 }, { unique: true });
 InviteTokenSchema.index({ tenantId: 1, email: 1 });
 InviteTokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
