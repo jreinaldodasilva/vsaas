@@ -1,12 +1,13 @@
 import { Outlet } from 'react-router-dom';
+import { useTranslation } from '../../i18n';
 
 export function AuthLayout() {
+  const { t } = useTranslation();
   return (
     <div className="auth-layout">
       <div className="auth-card">
-        {/* TODO: Add your app logo/branding here */}
         <div className="auth-brand">
-          <h1>vSaaS</h1>
+          <h1>{t('common.brand')}</h1>
         </div>
         <Outlet />
       </div>

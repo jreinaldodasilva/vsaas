@@ -1,6 +1,7 @@
 import { useState, useMemo, ReactNode } from 'react';
 import { Spinner } from '../Loading/Loading';
 import { EmptyState } from '../EmptyState/EmptyState';
+import { t } from '../../../i18n';
 
 export interface Column<T> {
   key: string;
@@ -24,7 +25,7 @@ interface DataTableProps<T> {
 
 export function DataTable<T extends Record<string, any>>({
   columns, data, total = 0, page = 1, limit = 10,
-  isLoading, onPageChange, onSearch, searchPlaceholder = 'Buscar...', emptyMessage = 'Nenhum registro encontrado',
+  isLoading, onPageChange, onSearch, searchPlaceholder = t('common.search'), emptyMessage = t('common.noResults'),
 }: DataTableProps<T>) {
   const [sortKey, setSortKey] = useState<string | null>(null);
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
@@ -106,9 +107,9 @@ export function DataTable<T extends Record<string, any>>({
 
           {totalPages > 1 && onPageChange && (
             <div className="data-table-pagination" style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 16 }}>
-              <button disabled={page <= 1} onClick={() => onPageChange(page - 1)}>Anterior</button>
+              <button disabled={page <= 1} onClick={() => onPageChange(page - 1)}>{t('common.previous')}</button>
               <span>{page} / {totalPages}</span>
-              <button disabled={page >= totalPages} onClick={() => onPageChange(page + 1)}>Próximo</button>
+              <button disabled={page >= totalPages} onClick={() => onPageChange(page + 1)}>{t('common.next')}</button>
             </div>
           )}
         </>

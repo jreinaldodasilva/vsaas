@@ -15,7 +15,7 @@ describe('Spinner', () => {
 
   it('has accessible label', () => {
     render(<Spinner />);
-    expect(screen.getByRole('status')).toHaveAttribute('aria-label', 'Carregando');
+    expect(screen.getByRole('status')).toHaveAttribute('aria-label', 'Loading');
   });
 });
 

@@ -3,10 +3,12 @@ import { useAuth } from '../../contexts/AuthContext';
 import { authService } from '../../services/api/authService';
 import { PasswordInput } from '../../components/UI';
 import { useToast } from '../../hooks/useToast';
+import { useTranslation } from '../../i18n';
 
 export function ProfilePage() {
   const { user } = useAuth();
   const toast = useToast();
+  const { t } = useTranslation();
   const [form, setForm] = useState({ currentPassword: '', newPassword: '' });
   const [loading, setLoading] = useState(false);
 
@@ -15,10 +17,10 @@ export function ProfilePage() {
     setLoading(true);
     try {
       await authService.changePassword(form.currentPassword, form.newPassword);
-      toast.success('Senha alterada com sucesso');
+      toast.success(t('auth.changePasswordSuccess'));
       setForm({ currentPassword: '', newPassword: '' });
     } catch (err: any) {
-      toast.error(err.message || 'Erro ao alterar senha');
+      toast.error(err.message || t('auth.changePasswordError'));
     } finally {
       setLoading(false);
     }
@@ -29,39 +31,21 @@ export function ProfilePage() {
 
   return (
     <div className="profile-page">
-      <h2>Meu perfil</h2>
-
+      <h2>{t('profile.title')}</h2>
       <section style={{ marginBottom: 32 }}>
-        <h3>Informações</h3>
-        <p><strong>Nome:</strong> {user?.name}</p>
-        <p><strong>E-mail:</strong> {user?.email}</p>
-        <p><strong>Função:</strong> {user?.role}</p>
+        <p><strong>{t('auth.name')}:</strong> {user?.name}</p>
+        <p><strong>{t('auth.email')}:</strong> {user?.email}</p>
       </section>
-
       <section>
-        <h3>Alterar senha</h3>
+        <h3>{t('auth.changePassword')}</h3>
         <form onSubmit={handleChangePassword}>
           <div>
-            <PasswordInput
-              id="currentPassword"
-              label="Senha atual"
-              value={form.currentPassword}
-              onChange={set('currentPassword')}
-              required
-            />
+            <PasswordInput id="currentPassword" label={t('auth.currentPassword')} value={form.currentPassword} onChange={set('currentPassword')} required />
           </div>
           <div>
-            <PasswordInput
-              id="newPassword"
-              label="Nova senha"
-              value={form.newPassword}
-              onChange={set('newPassword')}
-              required
-              minLength={8}
-              showStrength
-            />
+            <PasswordInput id="newPassword" label={t('auth.newPassword')} value={form.newPassword} onChange={set('newPassword')} required minLength={8} showStrength />
           </div>
-          <button type="submit" disabled={loading}>{loading ? 'Salvando...' : 'Alterar senha'}</button>
+          <button type="submit" disabled={loading}>{loading ? t('common.saving') : t('auth.changePassword')}</button>
         </form>
       </section>
     </div>

@@ -4,6 +4,7 @@ import { useApiQuery, useApiMutation } from '../../../hooks/useApi';
 import { useToast } from '../../../hooks/useToast';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useTenant } from '../../../contexts/TenantContext';
+import { useTranslation } from '../../../i18n';
 
 interface UserItem {
   id: string;
@@ -25,6 +26,7 @@ export function UsersPage() {
   const { user: currentUser } = useAuth();
   const { tenant } = useTenant();
   const toast = useToast();
+  const { t } = useTranslation();
 
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
@@ -42,7 +44,7 @@ export function UsersPage() {
     'patch',
     (vars) => `/api/v1/users/${vars.id}`,
     {
-      onSuccess: () => { toast.success('Usuário atualizado'); refetch(); },
+      onSuccess: () => { toast.success(t('users.updateSuccess')); refetch(); },
       onError: (err) => toast.error(err.message),
     },
   );
@@ -51,7 +53,7 @@ export function UsersPage() {
     'delete',
     (vars) => `/api/v1/users/${vars.id}`,
     {
-      onSuccess: () => { toast.success('Usuário desativado'); refetch(); },
+      onSuccess: () => { toast.success(t('users.deactivateSuccess')); refetch(); },
       onError: (err) => toast.error(err.message),
     },
   );
@@ -61,7 +63,7 @@ export function UsersPage() {
     `/api/v1/tenants/${tenant?.id}/invite`,
     {
       onSuccess: () => {
-        toast.success('Convite enviado');
+        toast.success(t('users.inviteSuccess'));
         setInviteOpen(false);
         setInviteEmail('');
         setInviteRole('staff');
@@ -71,24 +73,24 @@ export function UsersPage() {
   );
 
   const columns: Column<UserItem>[] = [
-    { key: 'name', header: 'Nome', sortable: true },
-    { key: 'email', header: 'Email', sortable: true },
+    { key: 'name', header: t('users.columns.name'), sortable: true },
+    { key: 'email', header: t('users.columns.email'), sortable: true },
     {
-      key: 'role', header: 'Papel', sortable: true,
+      key: 'role', header: t('users.columns.role'), sortable: true,
       render: (u) => u.id === currentUser?.id ? (
         <StatusBadge status={u.role} />
       ) : (
         <select
           value={u.role}
           onChange={(e) => updateUser.mutate({ id: u.id, role: e.target.value })}
-          aria-label={`Papel de ${u.name}`}
+          aria-label={t('users.roleLabel', { name: u.name })}
         >
           {ROLES.map(r => <option key={r} value={r}>{r}</option>)}
         </select>
       ),
     },
     {
-      key: 'isActive', header: 'Status',
+      key: 'isActive', header: t('users.columns.status'),
       render: (u) => <StatusBadge status={u.isActive ? 'active' : 'inactive'} />,
     },
     {
@@ -97,9 +99,9 @@ export function UsersPage() {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => { if (confirm('Desativar este usuário?')) deactivateUser.mutate({ id: u.id }); }}
+          onClick={() => { if (confirm(t('users.deactivateConfirm'))) deactivateUser.mutate({ id: u.id }); }}
         >
-          Desativar
+          {t('users.deactivate')}
         </Button>
       ),
     },
@@ -111,8 +113,8 @@ export function UsersPage() {
   return (
     <div className="page-users">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <h1>Usuários</h1>
-        <Button onClick={() => setInviteOpen(true)}>Convidar</Button>
+        <h1>{t('users.title')}</h1>
+        <Button onClick={() => setInviteOpen(true)}>{t('users.invite')}</Button>
       </div>
 
       <DataTable
@@ -124,32 +126,25 @@ export function UsersPage() {
         isLoading={isLoading}
         onPageChange={setPage}
         onSearch={setSearch}
-        searchPlaceholder="Buscar por nome ou email..."
-        emptyMessage="Nenhum usuário encontrado"
+        searchPlaceholder={t('users.searchPlaceholder')}
+        emptyMessage={t('users.empty')}
       />
 
-      <Modal isOpen={inviteOpen} onClose={() => setInviteOpen(false)} title="Convidar membro" size="sm">
+      <Modal isOpen={inviteOpen} onClose={() => setInviteOpen(false)} title={t('users.inviteTitle')} size="sm">
         <form onSubmit={(e) => { e.preventDefault(); invite.mutate({ email: inviteEmail, role: inviteRole }); }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <label>
-              Email
-              <input
-                type="email"
-                value={inviteEmail}
-                onChange={(e) => setInviteEmail(e.target.value)}
-                required
-                autoFocus
-                style={{ width: '100%', marginTop: 4 }}
-              />
+              {t('users.inviteEmail')}
+              <input type="email" value={inviteEmail} onChange={(e) => setInviteEmail(e.target.value)} required autoFocus style={{ width: '100%', marginTop: 4 }} />
             </label>
             <label>
-              Papel
+              {t('users.inviteRole')}
               <select value={inviteRole} onChange={(e) => setInviteRole(e.target.value)} style={{ width: '100%', marginTop: 4 }}>
                 {ROLES.map(r => <option key={r} value={r}>{r}</option>)}
               </select>
             </label>
             <Button type="submit" disabled={invite.isPending}>
-              {invite.isPending ? 'Enviando...' : 'Enviar convite'}
+              {invite.isPending ? t('users.inviteSending') : t('users.inviteSend')}
             </Button>
           </div>
         </form>

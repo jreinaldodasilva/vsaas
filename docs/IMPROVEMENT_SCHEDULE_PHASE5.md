@@ -29,9 +29,9 @@ Replace hardcoded Portuguese strings with an i18n foundation.
 
 | # | Item | Priority | Status |
 |---|------|----------|--------|
-| 19.1 | **i18n core** — Add `src/i18n/` with `t()` helper, locale loader, and `pt-BR` + `en` JSON files covering all existing UI strings. | High | ⬜ |
-| 19.2 | **Wire i18n into pages** — Replace hardcoded strings in all pages and components with `t()` calls. | High | ⬜ |
-| 19.3 | **Language switcher** — Add locale toggle to `DashboardLayout` sidebar footer. Persist choice in `localStorage`. | Medium | ⬜ |
+| 19.1 | **i18n core** — Add `src/i18n/` with `t()` helper, locale loader, and `pt-BR` + `en` JSON files covering all existing UI strings. | High | ✅ |
+| 19.2 | **Wire i18n into pages** — Replace hardcoded strings in all pages and components with `t()` calls. | High | ✅ |
+| 19.3 | **Language switcher** — Add locale toggle to `DashboardLayout` sidebar footer. Persist choice in `localStorage`. | Medium | ✅ |
 
 ---
 

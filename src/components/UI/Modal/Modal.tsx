@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { t } from '../../../i18n';
 
 interface ModalProps {
   isOpen: boolean;
@@ -26,7 +27,7 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
         {title && (
           <div className="modal-header">
             <h2 id="modal-title">{title}</h2>
-            <button className="modal-close" onClick={onClose} aria-label="Fechar">×</button>
+            <button className="modal-close" onClick={onClose} aria-label={t('common.close')}>×</button>
           </div>
         )}
         <div className="modal-body">{children}</div>

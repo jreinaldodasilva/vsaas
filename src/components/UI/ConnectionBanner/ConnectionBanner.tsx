@@ -1,4 +1,5 @@
 import { useHealthCheck } from '../../../hooks/useHealthCheck';
+import { t } from '../../../i18n';
 
 export function ConnectionBanner() {
   const { isApiReachable, recheckNow } = useHealthCheck();
@@ -21,12 +22,12 @@ export function ConnectionBanner() {
         fontSize: '0.9em',
       }}
     >
-      Sem conexão com o servidor.{' '}
+      {t('errors.apiUnreachable')}{' '}
       <button
         onClick={recheckNow}
         style={{ background: 'none', border: '1px solid #fff', color: '#fff', cursor: 'pointer', borderRadius: 4, padding: '2px 8px' }}
       >
-        Tentar novamente
+        ↻
       </button>
     </div>
   );

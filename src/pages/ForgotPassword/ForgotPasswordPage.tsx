@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { authService } from '../../services/api/authService';
+import { useTranslation } from '../../i18n';
 
 export function ForgotPasswordPage() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
@@ -16,7 +18,7 @@ export function ForgotPasswordPage() {
       await authService.forgotPassword(email);
       setSubmitted(true);
     } catch (err: any) {
-      setError(err?.message || 'Erro ao enviar e-mail de recuperação');
+      setError(err?.message || t('auth.forgotError'));
     } finally {
       setIsLoading(false);
     }
@@ -25,35 +27,26 @@ export function ForgotPasswordPage() {
   if (submitted) {
     return (
       <div className="forgot-password-page">
-        <h2>E-mail enviado</h2>
-        <p>Se o e-mail estiver registrado, você receberá um link para redefinir sua senha.</p>
-        <Link to="/login">Voltar ao login</Link>
+        <h2>{t('auth.forgotPasswordSuccess')}</h2>
+        <Link to="/login">{t('common.backToLogin')}</Link>
       </div>
     );
   }
 
   return (
     <div className="forgot-password-page">
-      <h2>Esqueceu a senha?</h2>
-      <p>Informe seu e-mail para receber um link de recuperação.</p>
+      <h2>{t('auth.forgotPassword')}</h2>
       <form onSubmit={handleSubmit}>
         {error && <div className="form-error">{error}</div>}
         <div className="form-field">
-          <label htmlFor="email">E-mail</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="email"
-          />
+          <label htmlFor="email">{t('auth.email')}</label>
+          <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
         </div>
         <button type="submit" disabled={isLoading} className="btn btn-primary">
-          {isLoading ? 'Enviando...' : 'Enviar link'}
+          {isLoading ? t('common.sending') : t('auth.sendLink')}
         </button>
       </form>
-      <p><Link to="/login">Voltar ao login</Link></p>
+      <p><Link to="/login">{t('common.backToLogin')}</Link></p>
     </div>
   );
 }

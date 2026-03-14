@@ -1,5 +1,5 @@
 export function Spinner({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
-  return <div className={`spinner spinner-${size}`} role="status" aria-label="Carregando" />;
+  return <div className={`spinner spinner-${size}`} role="status" aria-label="Loading" />;
 }
 
 export function LoadingScreen() {

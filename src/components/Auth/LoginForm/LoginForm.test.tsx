@@ -15,7 +15,7 @@ describe('LoginForm', () => {
 
   it('renders email and password fields', () => {
     render(<LoginForm />);
-    expect(screen.getByLabelText('E-mail')).toBeInTheDocument();
+    expect(screen.getByLabelText('Email')).toBeInTheDocument();
     expect(screen.getByLabelText('Senha')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Entrar' })).toBeInTheDocument();
   });
@@ -25,7 +25,7 @@ describe('LoginForm', () => {
     const onSuccess = vi.fn();
     render(<LoginForm onSuccess={onSuccess} />);
 
-    await userEvent.type(screen.getByLabelText('E-mail'), 'user@test.com');
+    await userEvent.type(screen.getByLabelText('Email'), 'user@test.com');
     await userEvent.type(screen.getByLabelText('Senha'), 'secret123');
     await userEvent.click(screen.getByRole('button', { name: 'Entrar' }));
 
@@ -37,7 +37,7 @@ describe('LoginForm', () => {
     mockLogin.mockRejectedValue(new Error('Invalid credentials'));
     render(<LoginForm />);
 
-    await userEvent.type(screen.getByLabelText('E-mail'), 'bad@test.com');
+    await userEvent.type(screen.getByLabelText('Email'), 'bad@test.com');
     await userEvent.type(screen.getByLabelText('Senha'), 'wrong');
     await userEvent.click(screen.getByRole('button', { name: 'Entrar' }));
 
@@ -48,7 +48,7 @@ describe('LoginForm', () => {
     mockLogin.mockRejectedValue({});
     render(<LoginForm />);
 
-    await userEvent.type(screen.getByLabelText('E-mail'), 'a@b.com');
+    await userEvent.type(screen.getByLabelText('Email'), 'a@b.com');
     await userEvent.type(screen.getByLabelText('Senha'), 'x');
     await userEvent.click(screen.getByRole('button', { name: 'Entrar' }));
 
@@ -59,7 +59,7 @@ describe('LoginForm', () => {
     mockLogin.mockImplementation(() => new Promise(() => {})); // never resolves
     render(<LoginForm />);
 
-    await userEvent.type(screen.getByLabelText('E-mail'), 'a@b.com');
+    await userEvent.type(screen.getByLabelText('Email'), 'a@b.com');
     await userEvent.type(screen.getByLabelText('Senha'), 'x');
     await userEvent.click(screen.getByRole('button', { name: 'Entrar' }));
 
