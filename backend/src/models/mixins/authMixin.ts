@@ -1,6 +1,10 @@
 import bcrypt from 'bcrypt';
 import { Document } from 'mongoose';
 
+import { SECURITY_POLICY } from '../../config/security/policy';
+
+const { ACCOUNT_LOCKOUT } = SECURITY_POLICY;
+
 export interface AuthDocument extends Document {
   password: string;
   loginAttempts: number;
@@ -25,10 +29,10 @@ export const authMixin = {
         this.lockUntil = undefined;
       }
       this.loginAttempts += 1;
-      if (this.loginAttempts >= 10) {
-        this.lockUntil = new Date(Date.now() + 24 * 60 * 60 * 1000);
-      } else if (this.loginAttempts >= 5) {
-        this.lockUntil = new Date(Date.now() + 60 * 60 * 1000);
+      if (this.loginAttempts >= ACCOUNT_LOCKOUT.MAX_ATTEMPTS) {
+        this.lockUntil = new Date(Date.now() + ACCOUNT_LOCKOUT.HARD_LOCK_DURATION_MS);
+      } else if (this.loginAttempts >= ACCOUNT_LOCKOUT.SOFT_LOCK_ATTEMPTS) {
+        this.lockUntil = new Date(Date.now() + ACCOUNT_LOCKOUT.SOFT_LOCK_DURATION_MS);
       }
       await this.save();
     },

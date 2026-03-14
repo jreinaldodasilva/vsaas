@@ -179,10 +179,9 @@ router.post('/refresh', async (req: Request, res: Response, next: NextFunction) 
  *     responses:
  *       200: { description: Logged out successfully }
  */
-router.post('/logout', authenticate, async (req: Request, res: Response, next: NextFunction) => {
-  const authReq = req as AuthenticatedRequest;
+router.post('/logout', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const refreshToken = authReq.cookies?.[REFRESH_COOKIE] || authReq.body.refreshToken;
+    const refreshToken = req.cookies?.[REFRESH_COOKIE] || req.body.refreshToken;
     if (refreshToken) await authService.logout(refreshToken);
     res.clearCookie(ACCESS_COOKIE, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict' });
     res.clearCookie(REFRESH_COOKIE, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict' });

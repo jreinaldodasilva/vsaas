@@ -6,7 +6,6 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import { v4 as uuidv4 } from 'uuid';
 import pinoHttp from 'pino-http';
-import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
 import { checkDatabaseConnection } from './middleware/database';
@@ -107,6 +106,14 @@ app.use(cors({
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization', 'X-CSRF-Token', 'x-correlation-id', 'Idempotency-Key'],
 }));
 
+// ─── Body Parsing & Security ──────────────────────────────────────────────────
+app.use('/api/v1/webhooks/stripe', express.raw({ type: 'application/json' }));
+app.use(express.json({ limit: '10mb', strict: true }));
+app.use(express.urlencoded({ extended: true, limit: '10mb', parameterLimit: 100 }));
+app.use(cookieParser());
+app.use(mongoSanitization);
+app.use(compression({ filter: (req, res) => req.headers['x-no-compression'] ? false : compression.filter(req, res), level: 6 }));
+
 // ─── Rate Limiting ────────────────────────────────────────────────────────────
 app.use('/api/v1/contact', contactLimiter);
 app.use('/api/v1/auth', authLimiter);
@@ -123,14 +130,6 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   res.setHeader('X-Request-ID', requestId);
   next();
 });
-
-// ─── Body Parsing & Security ──────────────────────────────────────────────────
-app.use('/api/v1/webhooks/stripe', express.raw({ type: 'application/json' }));
-app.use(express.json({ limit: '10mb', strict: true }));
-app.use(express.urlencoded({ extended: true, limit: '10mb', parameterLimit: 100 }));
-app.use(cookieParser());
-app.use(mongoSanitization);
-app.use(compression({ filter: (req, res) => req.headers['x-no-compression'] ? false : compression.filter(req, res), level: 6 }));
 
 // ─── Idempotency ──────────────────────────────────────────────────────────────
 app.use('/api/v1', idempotencyMiddleware);
@@ -160,20 +159,8 @@ app.use('/api', setTenantContext);
 app.use('/api/v1', v1Routes);
 
 // ─── Swagger ──────────────────────────────────────────────────────────────────
-const swaggerOptions = {
-  definition: {
-    openapi: '3.0.0',
-    info: { title: 'vSaaS API', version: '1.0.0', description: 'Vertical SaaS platform API' },
-    servers: [{ url: process.env.NODE_ENV === 'production' ? process.env.API_URL || '' : 'http://localhost:5000' }],
-    components: {
-      securitySchemes: {
-        cookieAuth: { type: 'apiKey', in: 'cookie', name: 'vsaas_access_token' },
-      },
-    },
-  },
-  apis: ['./src/routes/**/*.ts', './src/platform/**/routes/**/*.ts'],
-};
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerJsdoc(swaggerOptions)));
+import { swaggerSpec } from './config/swagger/swagger';
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // ─── Health ───────────────────────────────────────────────────────────────────
 app.use('/api/health', healthRoutes);

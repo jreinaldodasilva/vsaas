@@ -1,8 +1,6 @@
 import { SchemaDefinition, SchemaOptions } from 'mongoose';
 
 export const baseSchemaFields: SchemaDefinition = {
-  createdAt: { type: Date, default: Date.now, index: true },
-  updatedAt: { type: Date, default: Date.now },
   isDeleted: { type: Boolean, default: false, index: true },
   deletedAt: { type: Date },
 };

@@ -95,7 +95,6 @@ class AuthService {
 
     stored.isRevoked = true;
     await stored.save();
-    await tokenBlacklistService.addToBlacklist(refreshTokenString, stored.expiresAt);
 
     const payload: TokenPayload = {
       userId: user._id?.toString(),
@@ -239,7 +238,10 @@ class AuthService {
 
   async forgotPassword(email: string): Promise<string> {
     const user = await User.findOne({ email: email.toLowerCase() }).select('+passwordResetToken +passwordResetExpires') as any;
-    if (!user) return '';
+    if (!user) {
+      logger.debug({ email: email.toLowerCase() }, 'Password reset requested for unknown email');
+      return '';
+    }
     const resetToken = generatePasswordResetToken();
     user.passwordResetToken = hashPasswordResetToken(resetToken);
     user.passwordResetExpires = new Date(Date.now() + 10 * 60 * 1000);

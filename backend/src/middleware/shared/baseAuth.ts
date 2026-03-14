@@ -1,7 +1,6 @@
 import logger from '../../config/logger';
 import { Request, Response, NextFunction } from 'express';
 import { ApiResponse } from '../../utils/responseHelpers';
-import { tokenBlacklistService } from '../../services/auth/tokenBlacklistService';
 
 export abstract class BaseAuthMiddleware {
   protected extractToken(req: Request): string | null {
@@ -31,9 +30,6 @@ export abstract class BaseAuthMiddleware {
     try {
       const token = this.extractToken(req);
       if (!token) { ApiResponse.unauthorized(res, 'Token de acesso obrigatório'); return; }
-
-      const isBlacklisted = await tokenBlacklistService.isBlacklisted(token);
-      if (isBlacklisted) { ApiResponse.unauthorized(res, 'Token foi revogado'); return; }
 
       const payload = await this.verifyToken(token);
       if (!payload) { ApiResponse.invalidToken(res, 'Token inválido: formato incorreto'); return; }
