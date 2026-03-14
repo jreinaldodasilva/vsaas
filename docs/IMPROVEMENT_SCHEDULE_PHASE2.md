@@ -42,9 +42,9 @@ Items that improve reliability and observability in production.
 
 | # | Item | Priority | Status |
 |---|------|----------|--------|
-| 8.1 | **Document EventBus scaling path** — Add README/code comments in `eventBus.ts` explaining how to swap to Redis pub/sub or BullMQ events for multi-process deployments. Optionally add a `PersistentEventBus` adapter that writes events to MongoDB for audit/replay. | Medium | ⬜ |
-| 8.2 | **Add request body logging toggle** — Add `LOG_REQUEST_BODY=true` env var that logs sanitized request bodies via pino-http in development. Respect existing `logSanitizer` to strip sensitive fields. | Low | ⬜ |
-| 8.3 | **Add full-stack `docker-compose.dev.yml`** — Extend infra compose to also run API and frontend containers. Single `docker compose up` for the entire stack without local Node. | Low | ⬜ |
+| 8.1 | **Document EventBus scaling path** — Add README/code comments in `eventBus.ts` explaining how to swap to Redis pub/sub or BullMQ events for multi-process deployments. Optionally add a `PersistentEventBus` adapter that writes events to MongoDB for audit/replay. | Medium | ✅ |
+| 8.2 | **Add request body logging toggle** — Add `LOG_REQUEST_BODY=true` env var that logs sanitized request bodies via pino-http in development. Respect existing `logSanitizer` to strip sensitive fields. | Low | ✅ |
+| 8.3 | **Add full-stack `docker-compose.dev.yml`** — Extend infra compose to also run API and frontend containers. Single `docker compose up` for the entire stack without local Node. | Low | ✅ |
 
 ---
 

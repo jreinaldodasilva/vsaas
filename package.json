@@ -49,7 +49,8 @@
     "generate-secrets": "node scripts/generate-secrets.js",
     "generate:module": "npx ts-node packages/cli/src/generate-module.ts",
     "infra:up": "docker compose -f infrastructure/docker/docker-compose.yml up -d",
-    "infra:down": "docker compose -f infrastructure/docker/docker-compose.yml down"
+    "infra:down": "docker compose -f infrastructure/docker/docker-compose.yml down",
+    "dev:docker": "docker compose -f infrastructure/docker/docker-compose.dev.yml up --build"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",

@@ -37,7 +37,15 @@ const httpLogger = pinoHttp({
     if (res.statusCode >= 400) return 'warn';
     return 'info';
   },
-  serializers: { req: () => undefined, res: () => undefined },
+  serializers: {
+    req: (req) => {
+      if (process.env.LOG_REQUEST_BODY === 'true' && req.raw?.body) {
+        return { body: req.raw.body };
+      }
+      return undefined as any;
+    },
+    res: () => undefined,
+  },
 });
 
 if (process.env.NODE_ENV !== 'test') app.use(httpLogger);
