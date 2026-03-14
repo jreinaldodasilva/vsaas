@@ -12,7 +12,7 @@ export interface IAuditLog {
   statusCode?: number;
   changes?: { before?: any; after?: any };
   metadata?: Record<string, any>;
-  tenant?: mongoose.Types.ObjectId; // TODO: Rename to match your tenant field
+  tenantId?: mongoose.Types.ObjectId;
 }
 
 const AuditLogSchema = new Schema<IAuditLog & Document>({
@@ -32,7 +32,7 @@ const AuditLogSchema = new Schema<IAuditLog & Document>({
   statusCode: Number,
   changes: { before: Schema.Types.Mixed, after: Schema.Types.Mixed },
   metadata: Schema.Types.Mixed,
-  tenant: { type: Schema.Types.ObjectId, ref: 'Tenant', index: true }, // TODO: Rename ref
+  tenantId: { type: Schema.Types.ObjectId, ref: 'Tenant', index: true },
 }, {
   timestamps: true,
   toJSON: {
@@ -48,7 +48,7 @@ const AuditLogSchema = new Schema<IAuditLog & Document>({
 AuditLogSchema.index({ createdAt: -1 });
 AuditLogSchema.index({ createdAt: 1 }, { expireAfterSeconds: 7776000 }); // TTL: 90 days
 AuditLogSchema.index({ user: 1, createdAt: -1 });
-AuditLogSchema.index({ tenant: 1, createdAt: -1 });
+AuditLogSchema.index({ tenantId: 1, createdAt: -1 });
 AuditLogSchema.index({ action: 1, createdAt: -1 });
 
 export const AuditLog = mongoose.model<IAuditLog & Document>('AuditLog', AuditLogSchema);

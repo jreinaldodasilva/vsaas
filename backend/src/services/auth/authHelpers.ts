@@ -5,7 +5,7 @@ export interface TokenPayload extends jwt.JwtPayload {
   userId?: string;
   email: string;
   role?: string;
-  tenantId?: string; // TODO: Rename to match your tenant field (e.g. clinicId, departmentId)
+  tenantId?: string;
 }
 
 const ISSUER = 'vsaas-api';

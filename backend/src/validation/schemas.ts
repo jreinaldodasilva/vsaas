@@ -13,7 +13,3 @@ export const searchSchema = z.object({
   q: z.string().max(200).optional(),
   ...paginationSchema.shape,
 });
-
-// TODO: Add domain-specific validation schemas here
-// Example:
-// export const createPatientSchema = z.object({ ... });

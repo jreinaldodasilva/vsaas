@@ -1,4 +1,4 @@
-// Security policy constants — adjust to match your domain requirements
+// Security policy constants
 export const SECURITY_POLICY = {
   PASSWORD: {
     MIN_LENGTH: 8,
@@ -7,7 +7,7 @@ export const SECURITY_POLICY = {
     EXPIRY_DAYS: 90,
     REQUIRE_UPPERCASE: true,
     REQUIRE_NUMBER: true,
-    REQUIRE_SPECIAL: false, // TODO: Enable for stricter environments
+    REQUIRE_SPECIAL: false,
   },
   ACCOUNT_LOCKOUT: {
     MAX_ATTEMPTS: 10,

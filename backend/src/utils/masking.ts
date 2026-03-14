@@ -12,8 +12,6 @@ export function maskPhone(phone: string | undefined | null): string {
   return `(**) ****-${cleaned.slice(-4)}`;
 }
 
-// TODO: Add domain-specific masking functions (e.g. maskCPF, maskSSN, maskCreditCard)
-
 export function maskSensitiveData(data: any): any {
   if (!data || typeof data !== 'object') return data;
   const masked = Array.isArray(data) ? [...data] : { ...data };

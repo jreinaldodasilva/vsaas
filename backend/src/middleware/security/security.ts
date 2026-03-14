@@ -6,7 +6,6 @@ const { generateCsrfToken, doubleCsrfProtection } = doubleCsrf({
   getSecret: () => env.csrf.secret,
   getSessionIdentifier: (req) => {
     const cookies = (req as any).cookies ?? {};
-    // TODO: Update cookie names to match your app
     return cookies['refreshToken'] ?? cookies['portalRefreshToken'] ?? req.ip ?? '';
   },
   cookieName: process.env.NODE_ENV === 'production' ? '__Host-psifi.x-csrf-token' : 'x-csrf-token',

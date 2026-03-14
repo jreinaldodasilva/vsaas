@@ -12,7 +12,7 @@ export interface AuthUser {
   id: string;
   email: string;
   role: string;
-  tenantId?: string; // TODO: Rename to match your tenant field
+  tenantId?: string;
 }
 
 export type AuthenticatedRequest = Request & { user?: AuthUser };
@@ -27,14 +27,14 @@ function logAuthzFailure(req: Request, reason: string): void {
     path: req.path,
     ipAddress: req.ip || 'unknown',
     userAgent: req.get('user-agent'),
-    tenant: authReq.user?.tenantId,
+    tenantId: authReq.user?.tenantId,
     metadata: { role: authReq.user?.role, reason },
   }).catch(() => {});
 }
 
 class StaffAuthMiddleware extends BaseAuthMiddleware {
   protected getCookieTokens(cookies: any): string | null {
-    // TODO: Rename cookie to match your app (e.g. 'vsaas_access_token')
+    // Rename cookie to match your app
     return cookies['vsaas_access_token'] || null;
   }
 

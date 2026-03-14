@@ -24,7 +24,7 @@ export function DashboardLayout() {
           <NavLink to="/admin/dashboard" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
             Dashboard
           </NavLink>
-          {/* TODO: Add domain-specific nav links here */}
+          {/* Add nav links for your modules here */}
         </nav>
         <div className="sidebar-footer">
           <span className="sidebar-user">{user?.name}</span>

@@ -14,7 +14,7 @@ import { validateRequest } from '../middleware/validate';
 
 const router = express.Router();
 
-// TODO: Update cookie names to match your app (e.g. 'vsaas_access_token')
+// Rename cookie constants to match your app
 const ACCESS_COOKIE = 'vsaas_access_token';
 const REFRESH_COOKIE = 'refreshToken';
 

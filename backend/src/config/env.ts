@@ -11,7 +11,7 @@ interface EnvConfig {
   jwt: {
     secret: string;
     refreshSecret: string;
-    portalSecret: string; // JWT secret for end-user portal (e.g. patient, athlete, citizen)
+    portalSecret: string;
     expiresIn: string;
     portalExpiresIn: string;
     refreshExpiresDays: number;

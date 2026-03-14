@@ -6,15 +6,13 @@ export interface QueryOptions {
   limit?: number;
   sort?: Record<string, 1 | -1>;
   tenantId?: string;
-  // TODO: Add domain-specific filter fields
 }
 
 export abstract class BaseService<T extends Document> {
   constructor(protected readonly model: Model<T>) {}
 
   protected tenantFilter(tenantId?: string): FilterQuery<T> {
-    // TODO: Replace 'tenant' with your tenant field name (e.g. 'clinic', 'department')
-    return tenantId ? ({ tenant: tenantId } as FilterQuery<T>) : ({} as FilterQuery<T>);
+    return tenantId ? ({ tenantId } as FilterQuery<T>) : ({} as FilterQuery<T>);
   }
 
   async findById(id: string, tenantId?: string): Promise<T> {

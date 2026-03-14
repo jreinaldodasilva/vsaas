@@ -1,12 +1,9 @@
-// Generic roles for vsaas boilerplate.
-// TODO: Replace or extend with domain-specific roles (e.g. dentist, instructor, journalist).
-
 export const ROLES = {
   SUPER_ADMIN: 'super_admin',
   ADMIN: 'admin',
   MANAGER: 'manager',
   STAFF: 'staff',
-  // TODO: Add domain-specific roles here
+  // Add roles for your vertical here after scaffolding.
 } as const;
 
 export type UserRole = typeof ROLES[keyof typeof ROLES];

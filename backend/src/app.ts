@@ -22,6 +22,7 @@ import { validatePagination } from './middleware/pagination';
 import { apiLimiter, authLimiter, refreshLimiter, passwordResetLimiter, contactLimiter } from './middleware/rateLimiter';
 import healthRoutes from './routes/monitoring/health';
 import v1Routes from './routes/v1';
+import { resolveTenant, setTenantContext } from './platform/tenants';
 
 dotenv.config();
 validateEnv();
@@ -146,6 +147,10 @@ app.use('/api', responseWrapper);
 app.use('/api', auditLogger);
 app.use('/api', validatePagination);
 
+// ─── Tenant Context ──────────────────────────────────────────────────────────
+app.use('/api', resolveTenant);
+app.use('/api', setTenantContext);
+
 // ─── Routes ───────────────────────────────────────────────────────────────────
 app.use('/api/v1', v1Routes);
 
@@ -153,12 +158,10 @@ app.use('/api/v1', v1Routes);
 const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
-    // TODO: Update title and description to match your app
-    info: { title: 'vSaaS API', version: '1.0.0', description: 'Generic vertical SaaS boilerplate API' },
+    info: { title: 'vSaaS API', version: '1.0.0', description: 'Vertical SaaS platform API' },
     servers: [{ url: process.env.NODE_ENV === 'production' ? process.env.API_URL || '' : 'http://localhost:5000' }],
     components: {
       securitySchemes: {
-        // TODO: Update cookie name to match your app
         cookieAuth: { type: 'apiKey', in: 'cookie', name: 'vsaas_access_token' },
       },
     },

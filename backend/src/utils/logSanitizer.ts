@@ -1,4 +1,3 @@
-// TODO: Add domain-specific sensitive fields (e.g. 'cpf', 'ssn', 'creditCard')
 const SENSITIVE_FIELDS = ['password', 'token', 'refreshToken', 'accessToken'];
 const EMAIL_REGEX = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/g;
 

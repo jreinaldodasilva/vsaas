@@ -1,6 +1,6 @@
 interface StatusBadgeProps {
   status: string;
-  // TODO: Map domain-specific statuses to colors here
+  // Extend this map with statuses from your modules.
   colorMap?: Record<string, string>;
 }
 

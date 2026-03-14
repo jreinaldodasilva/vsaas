@@ -3,7 +3,7 @@ import { ROLES, UserRole } from './roles';
 
 const P = PERMISSIONS;
 
-// TODO: Adjust permission assignments to match your domain roles.
+// Adjust permission assignments when adding new roles or generated modules.
 export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   [ROLES.SUPER_ADMIN]: Object.values(PERMISSIONS) as Permission[],
 
@@ -12,12 +12,15 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     P.SETTINGS_READ, P.SETTINGS_WRITE,
     P.REPORTS_READ, P.REPORTS_WRITE,
     P.AUDIT_READ,
+    P.TENANTS_READ, P.TENANTS_WRITE,
+    // Add domain permissions here after generating modules
   ],
 
   [ROLES.MANAGER]: [
     P.USERS_READ,
     P.SETTINGS_READ,
     P.REPORTS_READ,
+    P.TENANTS_READ,
   ],
 
   [ROLES.STAFF]: [

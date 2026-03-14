@@ -14,7 +14,7 @@ interface AuditLogData {
   statusCode?: number;
   changes?: { before?: any; after?: any };
   metadata?: Record<string, any>;
-  tenant?: string; // TODO: Rename to match your tenant field
+  tenantId?: string;
 }
 
 class AuditService {
@@ -35,7 +35,7 @@ class AuditService {
       path: req.path,
       ipAddress: req.ip || 'unknown',
       userAgent: req.get('user-agent'),
-      tenant: req.user?.tenantId,
+      tenantId: req.user?.tenantId,
       metadata,
     });
   }

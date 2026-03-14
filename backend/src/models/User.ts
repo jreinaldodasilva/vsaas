@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import { authMixin } from './mixins/authMixin';
 import { baseSchemaFields, baseSchemaOptions } from './base/baseSchema';
 
-// TODO: Import UserRole from @vsaas/types or your domain types
+// TODO: Import UserRole from @vsaas/types
 const USER_ROLES = ['super_admin', 'admin', 'manager', 'staff'] as const;
 
 const UserSchema = new Schema({
@@ -33,8 +33,7 @@ const UserSchema = new Schema({
     enum: USER_ROLES,
     default: 'staff',
   },
-  // TODO: Add tenant reference field here (e.g. clinic, department)
-  // tenant: { type: Schema.Types.ObjectId, ref: 'Tenant', index: true },
+  tenantId: { type: Schema.Types.ObjectId, ref: 'Tenant', index: true },
   ...authMixin.fields,
   passwordResetToken: { type: String, select: false },
   passwordResetExpires: { type: Date, select: false },
@@ -103,6 +102,7 @@ Object.assign(UserSchema.methods, authMixin.methods);
 Object.assign(UserSchema.statics, authMixin.statics);
 
 UserSchema.index({ email: 1 }, { unique: true });
-// TODO: Add tenant-scoped index: UserSchema.index({ tenant: 1, role: 1 });
+UserSchema.index({ tenantId: 1, role: 1 });
+UserSchema.index({ tenantId: 1, email: 1 });
 
 export const User = mongoose.model('User', UserSchema);

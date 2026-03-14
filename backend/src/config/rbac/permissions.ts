@@ -1,6 +1,3 @@
-// Generic permissions for vsaas boilerplate.
-// TODO: Replace resource names (e.g. RECORDS, APPOINTMENTS) with your domain entities.
-
 export const PERMISSIONS = {
   // Users
   USERS_READ: 'users:read',
@@ -18,12 +15,14 @@ export const PERMISSIONS = {
   REPORTS_READ: 'reports:read',
   REPORTS_WRITE: 'reports:write',
 
-  // TODO: Add domain-specific permissions here
-  // Example:
-  // RECORDS_READ: 'records:read',
-  // RECORDS_WRITE: 'records:write',
-  // APPOINTMENTS_READ: 'appointments:read',
-  // APPOINTMENTS_WRITE: 'appointments:write',
+  // Tenants
+  TENANTS_READ: 'tenants:read',
+  TENANTS_WRITE: 'tenants:write',
+  TENANTS_DELETE: 'tenants:delete',
+
+  // Add permissions for generated modules here.
+  // After running: npm run generate:module -- <name>
+  // Add: <NAME>_READ, <NAME>_WRITE, <NAME>_DELETE
 } as const;
 
 export type Permission = typeof PERMISSIONS[keyof typeof PERMISSIONS];

@@ -1,5 +1,4 @@
-// @vsaas/types — Generic shared types for vertical SaaS boilerplate
-// Replace domain-specific types (e.g. Patient, Provider) with your own entities.
+// @vsaas/types — Shared types for the vertical SaaS platform
 
 export type ApiResult<T = any> = {
   success: boolean;
@@ -31,7 +30,7 @@ export type User = {
   name: string;
   email: string;
   role: string;
-  tenantId?: string; // Replace with your tenant field (e.g. clinicId, departmentId)
+  tenantId?: string;
   isActive?: boolean;
   lastLogin?: string | Date;
   mfaEnabled?: boolean;
@@ -62,7 +61,6 @@ export type RegisterRequest = {
   name: string;
   email: string;
   password: string;
-  // Add tenant registration data here (e.g. clinic, department)
   tenant?: Record<string, any>;
 };
 
@@ -123,7 +121,7 @@ export const UserRole = {
   ADMIN: 'admin',
   MANAGER: 'manager',
   STAFF: 'staff',
-  // TODO: Add domain-specific roles here
+  // Add roles for your vertical here.
 } as const;
 
 export type UserRoleType = typeof UserRole[keyof typeof UserRole];
@@ -133,7 +131,27 @@ export type UserRoleType = typeof UserRole[keyof typeof UserRole];
 export type ID = string;
 export type DateString = string;
 
-// ─── TODO: Add domain-specific types below ───────────────────────────────────
-// Example:
-// export type Patient = { ... };
-// export type Appointment = { ... };
+// ─── Domain types ───────────────────────────────────────────────────────────────────
+
+export type Tenant = {
+  id?: string;
+  _id?: string;
+  name: string;
+  slug: string;
+  domain?: string;
+  status: 'active' | 'suspended' | 'trial' | 'cancelled' | 'deleted';
+  plan: 'trial' | 'starter' | 'professional' | 'enterprise';
+  settings: {
+    timezone: string;
+    locale: string;
+    currency: string;
+    features: Record<string, boolean>;
+  };
+  owner: string;
+  trialEndsAt?: string | Date;
+  maxUsers: number;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+};
+
+// Add types for generated modules below.

@@ -121,6 +121,7 @@ class AuthService {
       userId: user._id?.toString(),
       email: user.email,
       role: user.role,
+      ...((user as any).tenantId && { tenantId: (user as any).tenantId.toString() }),
     };
 
     const accessToken = this.generateAccessToken(payload);
