@@ -41,9 +41,9 @@ Improve error handling and theming.
 
 | # | Item | Priority | Status |
 |---|------|----------|--------|
-| 20.1 | **Dark mode** — Add `[data-theme="dark"]` CSS token overrides, theme toggle component, persist in `localStorage`. | Medium | ⬜ |
-| 20.2 | **Fix Cypress e2e tests** — Update selectors and assertions to match current page components (UnauthorizedPage, NotFoundPage, etc). | Medium | ⬜ |
-| 20.3 | **Remove unused `react-hook-form` chunk** — It's in Vite manual chunks but not used. Clean up `vite.config.ts`. | Low | ⬜ |
+| 20.1 | **Dark mode** — Add `[data-theme="dark"]` CSS token overrides, theme toggle component, persist in `localStorage`. | Medium | ✅ |
+| 20.2 | **Fix Cypress e2e tests** — Update selectors and assertions to match current page components (UnauthorizedPage, NotFoundPage, etc). | Medium | ✅ |
+| 20.3 | **Remove unused `react-hook-form` chunk** — It's in Vite manual chunks but not used. Clean up `vite.config.ts`. | Low | ✅ |
 
 ---
 

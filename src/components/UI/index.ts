@@ -7,3 +7,4 @@ export { PasswordInput } from './PasswordInput/PasswordInput';
 export { ConnectionBanner } from './ConnectionBanner/ConnectionBanner';
 export { DataTable } from './Table/DataTable';
 export type { Column } from './Table/DataTable';
+export { ThemeToggle } from './ThemeToggle/ThemeToggle';

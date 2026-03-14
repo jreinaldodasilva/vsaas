@@ -29,7 +29,7 @@ export default defineConfig({
         manualChunks: {
           vendor: ['react', 'react-dom', 'react-router-dom'],
           query: ['@tanstack/react-query'],
-          forms: ['react-hook-form', 'zod'],
+          forms: ['zod'],
         },
       },
     },

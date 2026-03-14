@@ -2,6 +2,7 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useUIStore } from '../../store/uiStore';
 import { useTranslation, SUPPORTED_LOCALES } from '../../i18n';
+import { ThemeToggle } from '../../components/UI';
 
 export function DashboardLayout() {
   const { user, logout } = useAuth();
@@ -34,6 +35,7 @@ export function DashboardLayout() {
           {/* Add nav links for your modules here */}
         </nav>
         <div className="sidebar-footer">
+          <ThemeToggle />
           <select
             value={locale}
             onChange={(e) => setLocale(e.target.value)}

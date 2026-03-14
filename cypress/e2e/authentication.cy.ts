@@ -1,4 +1,3 @@
-// cypress/e2e/authentication.cy.ts
 describe('Authentication', () => {
   beforeEach(() => {
     cy.visit('/login');
@@ -8,6 +7,7 @@ describe('Authentication', () => {
     cy.get('form.login-form').should('exist');
     cy.get('input[type="email"]').should('exist');
     cy.get('input[type="password"]').should('exist');
+    cy.get('button[type="submit"]').should('exist');
   });
 
   it('shows error on invalid credentials', () => {
@@ -25,23 +25,23 @@ describe('Authentication', () => {
   });
 
   it('navigates to forgot-password page', () => {
-    cy.contains('Esqueceu a senha?').click();
+    cy.get('a[href="/forgot-password"]').click();
     cy.url().should('include', '/forgot-password');
     cy.get('input[type="email"]').should('exist');
   });
 
   it('navigates to register page', () => {
-    cy.contains('Criar conta').click();
+    cy.get('a[href="/register"]').click();
     cy.url().should('include', '/register');
     cy.get('#name').should('exist');
     cy.get('#companyName').should('exist');
   });
 
-  it('shows forgot-password success message on submit', () => {
+  it('shows forgot-password success on submit', () => {
     cy.visit('/forgot-password');
     cy.get('input[type="email"]').type('user@example.com');
     cy.get('button[type="submit"]').click();
-    cy.contains('link').should('be.visible');
+    cy.get('a[href="/login"]').should('be.visible');
   });
 });
 
@@ -51,8 +51,13 @@ describe('Protected Routes', () => {
     cy.url().should('include', '/login');
   });
 
-  it('shows unauthorized page for invalid route', () => {
+  it('shows 403 page for unauthorized route', () => {
     cy.visit('/unauthorized');
-    cy.contains('não autorizado', { matchCase: false }).should('be.visible');
+    cy.contains('403').should('be.visible');
+  });
+
+  it('shows 404 page for unknown route', () => {
+    cy.visit('/nonexistent-page');
+    cy.contains('404').should('be.visible');
   });
 });
