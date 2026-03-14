@@ -54,8 +54,8 @@ Fill remaining test coverage gaps.
 
 | # | Item | Priority | Status |
 |---|------|----------|--------|
-| 9.1 | **Expand Cypress e2e tests** — Add tests for forgot-password flow, protected route redirect, and unauthorized access. | Low | ⬜ |
-| 9.2 | **Add frontend `useHealthCheck` hook** — Polls `/api/health`, exposes `isApiReachable` boolean. Optional `<ConnectionBanner>` component that shows when API is down. | Low | ⬜ |
+| 9.1 | **Expand Cypress e2e tests** — Add tests for forgot-password flow, protected route redirect, and unauthorized access. | Low | ✅ |
+| 9.2 | **Add frontend `useHealthCheck` hook** — Polls `/api/health`, exposes `isApiReachable` boolean. Optional `<ConnectionBanner>` component that shows when API is down. | Low | ✅ |
 
 ---
 

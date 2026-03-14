@@ -23,4 +23,36 @@ describe('Authentication', () => {
     cy.get('button[type="submit"]').click();
     cy.url().should('include', '/admin/dashboard');
   });
+
+  it('navigates to forgot-password page', () => {
+    cy.contains('Esqueceu a senha?').click();
+    cy.url().should('include', '/forgot-password');
+    cy.get('input[type="email"]').should('exist');
+  });
+
+  it('navigates to register page', () => {
+    cy.contains('Criar conta').click();
+    cy.url().should('include', '/register');
+    cy.get('#name').should('exist');
+    cy.get('#companyName').should('exist');
+  });
+
+  it('shows forgot-password success message on submit', () => {
+    cy.visit('/forgot-password');
+    cy.get('input[type="email"]').type('user@example.com');
+    cy.get('button[type="submit"]').click();
+    cy.contains('link').should('be.visible');
+  });
+});
+
+describe('Protected Routes', () => {
+  it('redirects unauthenticated user to login', () => {
+    cy.visit('/admin/dashboard');
+    cy.url().should('include', '/login');
+  });
+
+  it('shows unauthorized page for invalid route', () => {
+    cy.visit('/unauthorized');
+    cy.contains('não autorizado', { matchCase: false }).should('be.visible');
+  });
 });
