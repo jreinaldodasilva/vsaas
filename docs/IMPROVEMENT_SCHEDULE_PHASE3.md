@@ -17,9 +17,9 @@ Features every multi-tenant SaaS user expects out of the box.
 
 | # | Item | Priority | Status |
 |---|------|----------|--------|
-| 10.1 | **User invitation flow** — `POST /tenants/:id/invite` sends email with invite token, `POST /auth/accept-invite` creates user under that tenant. Frontend invite acceptance page. | High | ⬜ |
-| 10.2 | **User management CRUD** — `GET/PATCH/DELETE /users` for tenant admins to list, update roles, deactivate members. Frontend page with table. | High | ⬜ |
-| 10.3 | **Email templates + actual sending** — Wire `queueService.sendEmail()` into forgot-password, invite, and welcome flows. Add HTML email templates. | High | ⬜ |
+| 10.1 | **User invitation flow** — `POST /tenants/:id/invite` sends email with invite token, `POST /auth/accept-invite` creates user under that tenant. Frontend invite acceptance page. | High | ✅ |
+| 10.2 | **User management CRUD** — `GET/PATCH/DELETE /users` for tenant admins to list, update roles, deactivate members. Frontend page with table. | High | ✅ |
+| 10.3 | **Email templates + actual sending** — Wire `queueService.sendEmail()` into forgot-password, invite, and welcome flows. Add HTML email templates. | High | ✅ |
 
 ---
 

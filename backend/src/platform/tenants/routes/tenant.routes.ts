@@ -1,8 +1,11 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { tenantService } from '../services/tenant.service';
+import { authService } from '../../../services/auth';
 import { authenticate, authorize, AuthenticatedRequest } from '../../../middleware/auth/auth';
 import { validateSchema } from '../../../validation/middleware';
 import { createTenantSchema, updateTenantSchema, tenantFiltersSchema } from '../validators/tenant.validator';
+import { inviteMemberValidation } from '../../../routes/validations/authValidation';
+import { validateRequest } from '../../../middleware/validate';
 
 const router = Router();
 
@@ -95,6 +98,24 @@ router.patch('/:id',
       }
       const tenant = await tenantService.update(req.params.id, req.body);
       res.json({ success: true, data: tenant });
+    } catch (error) { next(error); }
+  }
+);
+
+// Invite member (admin+)
+router.post('/:id/invite',
+  authenticate,
+  authorize('super_admin', 'admin'),
+  inviteMemberValidation,
+  validateRequest,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const authReq = req as AuthenticatedRequest;
+      if (authReq.user?.role !== 'super_admin' && authReq.user?.tenantId !== req.params.id) {
+        return res.status(403).json({ success: false, error: { message: 'Acesso negado' } });
+      }
+      const result = await authService.inviteMember(req.params.id, req.body.email, req.body.role, authReq.user!.id);
+      res.status(201).json({ success: true, data: result });
     } catch (error) { next(error); }
   }
 );

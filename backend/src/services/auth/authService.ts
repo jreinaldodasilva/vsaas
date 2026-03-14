@@ -8,7 +8,11 @@ import { generatePasswordResetToken, hashPasswordResetToken } from './passwordHe
 import { tokenBlacklistService } from './tokenBlacklistService';
 import { env } from '../../config/env';
 import { tenantService } from '../../platform/tenants/services/tenant.service';
-import { eventBus, AUTH_EVENTS } from '../../platform/events';
+import { eventBus, AUTH_EVENTS, TENANT_EVENTS } from '../../platform/events';
+import { queueService } from '../queue/queueService';
+import { emailTemplates } from '../external/templates/emailTemplates';
+import { InviteToken } from '../../models/InviteToken';
+import * as crypto from 'crypto';
 
 export interface LoginData { email: string; password: string; }
 export interface DeviceInfo { userAgent?: string; ipAddress?: string; deviceId?: string; }
@@ -176,6 +180,11 @@ class AuthService {
       tenantSlug: tenant.slug,
     });
 
+    const tpl = emailTemplates.welcome((owner as any).name);
+    queueService.sendEmail({ to: owner.email, ...tpl }).catch((err) =>
+      logger.error({ err, email: owner.email }, 'Failed to queue welcome email'),
+    );
+
     return {
       success: true as const,
       data: {
@@ -224,6 +233,12 @@ class AuthService {
     user.passwordResetToken = hashPasswordResetToken(resetToken);
     user.passwordResetExpires = new Date(Date.now() + 10 * 60 * 1000);
     await user.save();
+
+    const tpl = emailTemplates.passwordReset(user.name, resetToken);
+    queueService.sendEmail({ to: user.email, ...tpl }).catch((err) =>
+      logger.error({ err, email: user.email }, 'Failed to queue password reset email'),
+    );
+
     return resetToken;
   }
 
@@ -239,6 +254,81 @@ class AuthService {
     user.passwordResetExpires = undefined;
     await user.save();
     await this.logoutAllDevices(user._id?.toString());
+  }
+  async inviteMember(tenantId: string, email: string, role: string, invitedBy: string) {
+    const existing = await User.findOne({ email: email.toLowerCase(), tenantId });
+    if (existing) throw new ConflictError('Usuário já é membro deste tenant');
+
+    const tenant = await tenantService.findById(tenantId);
+    const inviter = await User.findById(invitedBy);
+
+    const token = crypto.randomBytes(32).toString('hex');
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 7);
+
+    await InviteToken.create({ tenantId, email: email.toLowerCase(), role, token, invitedBy, expiresAt });
+
+    const tpl = emailTemplates.invite(
+      (inviter as any)?.name || 'Um administrador',
+      tenant.name,
+      token,
+      role,
+    );
+    queueService.sendEmail({ to: email, ...tpl }).catch((err) =>
+      logger.error({ err, email }, 'Failed to queue invite email'),
+    );
+
+    await eventBus.emit(TENANT_EVENTS.MEMBER_INVITED, {
+      tenantId, email, role, invitedBy,
+    });
+
+    return { email, role, expiresAt };
+  }
+
+  async acceptInvite(token: string, name: string, password: string, deviceInfo?: DeviceInfo) {
+    const invite = await InviteToken.findOne({ token, acceptedAt: null, expiresAt: { $gt: new Date() } });
+    if (!invite) throw new UnauthorizedError('Convite inválido ou expirado');
+
+    const existingUser = await User.findOne({ email: invite.email });
+    if (existingUser) throw new ConflictError('E-mail já está em uso');
+
+    const user = await User.create({
+      name,
+      email: invite.email,
+      password,
+      role: invite.role,
+      tenantId: invite.tenantId,
+    });
+
+    invite.acceptedAt = new Date();
+    await invite.save();
+
+    const payload: TokenPayload = {
+      userId: (user as any)._id?.toString(),
+      email: (user as any).email,
+      role: (user as any).role,
+      tenantId: invite.tenantId.toString(),
+    };
+
+    const accessToken = this.generateAccessToken(payload);
+    const refreshDoc = await this.createRefreshToken((user as any)._id?.toString(), deviceInfo);
+
+    await eventBus.emit(TENANT_EVENTS.MEMBER_JOINED, {
+      tenantId: invite.tenantId.toString(),
+      userId: (user as any)._id?.toString(),
+      email: invite.email,
+      role: invite.role,
+    });
+
+    return {
+      success: true as const,
+      data: {
+        user: { id: (user as any)._id?.toString(), name: (user as any).name, email: (user as any).email, role: (user as any).role },
+        accessToken,
+        refreshToken: refreshDoc.token,
+        expiresIn: this.ACCESS_TOKEN_EXPIRES,
+      },
+    };
   }
 }
 

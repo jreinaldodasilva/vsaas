@@ -25,3 +25,14 @@ export const resetPasswordValidation = [
   body('token').notEmpty().withMessage('Token é obrigatório'),
   body('newPassword').isLength({ min: 8 }).withMessage('Nova senha deve ter pelo menos 8 caracteres'),
 ];
+
+export const acceptInviteValidation = [
+  body('token').notEmpty().withMessage('Token é obrigatório'),
+  body('name').trim().isLength({ min: 2, max: 100 }).withMessage('Nome deve ter entre 2 e 100 caracteres'),
+  body('password').isLength({ min: 8 }).withMessage('Senha deve ter pelo menos 8 caracteres'),
+];
+
+export const inviteMemberValidation = [
+  body('email').isEmail().normalizeEmail().withMessage('E-mail inválido'),
+  body('role').isIn(['admin', 'manager', 'staff']).withMessage('Role deve ser admin, manager ou staff'),
+];

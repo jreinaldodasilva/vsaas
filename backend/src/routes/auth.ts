@@ -7,6 +7,7 @@ import { UnauthorizedError } from '../utils/errors';
 import {
   loginValidation,
   registerValidation,
+  acceptInviteValidation,
   changePasswordValidation,
   forgotPasswordValidation,
   resetPasswordValidation,
@@ -145,6 +146,23 @@ router.post('/reset-password', resetPasswordValidation, validateRequest, async (
   try {
     await authService.resetPasswordWithToken(req.body.token, req.body.newPassword);
     return res.json({ success: true, message: 'Senha redefinida com sucesso.' });
+  } catch (error) { next(error); }
+});
+
+router.post('/accept-invite', acceptInviteValidation, validateRequest, async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const deviceInfo = {
+      userAgent: req.headers['user-agent'],
+      ipAddress: req.ip,
+      deviceId: req.headers['x-device-id'] as string,
+    };
+    const result = await authService.acceptInvite(req.body.token, req.body.name, req.body.password, deviceInfo);
+    const { accessToken, refreshToken, expiresIn, user } = result.data;
+
+    res.cookie(ACCESS_COOKIE, accessToken, cookieOpts(15 * 60 * 1000));
+    res.cookie(REFRESH_COOKIE, refreshToken, cookieOpts(7 * 24 * 60 * 60 * 1000));
+
+    return res.status(201).json({ success: true, data: { user, expiresIn } });
   } catch (error) { next(error); }
 });
 

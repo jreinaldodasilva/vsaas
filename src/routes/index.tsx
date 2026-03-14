@@ -4,6 +4,7 @@ import { DashboardLayout } from '../layouts/DashboardLayout/DashboardLayout';
 import { ProtectedRoute } from '../components/Auth/ProtectedRoute/ProtectedRoute';
 import { LoginPage } from '../pages/Login/LoginPage';
 import { RegisterPage } from '../pages/Register/RegisterPage';
+import { AcceptInvitePage } from '../pages/AcceptInvite/AcceptInvitePage';
 import { ForgotPasswordPage } from '../pages/ForgotPassword/ForgotPasswordPage';
 import { DashboardPage } from '../pages/Admin/Dashboard/DashboardPage';
 
@@ -14,6 +15,7 @@ export function AppRoutes() {
       <Route element={<AuthLayout />}>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/accept-invite" element={<AcceptInvitePage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       </Route>
 
