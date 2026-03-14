@@ -8,7 +8,10 @@ import { AcceptInvitePage } from '../pages/AcceptInvite/AcceptInvitePage';
 import { ForgotPasswordPage } from '../pages/ForgotPassword/ForgotPasswordPage';
 import { ResetPasswordPage } from '../pages/ResetPassword/ResetPasswordPage';
 import { DashboardPage } from '../pages/Admin/Dashboard/DashboardPage';
+import { UsersPage } from '../pages/Admin/Users/UsersPage';
 import { ProfilePage } from '../pages/Settings/ProfilePage';
+import { NotFoundPage } from '../pages/Error/NotFoundPage';
+import { UnauthorizedPage } from '../pages/Error/UnauthorizedPage';
 
 export function AppRoutes() {
   return (
@@ -25,13 +28,14 @@ export function AppRoutes() {
       {/* Protected routes */}
       <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
         <Route path="/admin/dashboard" element={<DashboardPage />} />
+        <Route path="/admin/users" element={<UsersPage />} />
         <Route path="/settings/profile" element={<ProfilePage />} />
       </Route>
 
       {/* Fallback */}
       <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
-      <Route path="/unauthorized" element={<div>Acesso não autorizado</div>} />
-      <Route path="*" element={<div>Página não encontrada</div>} />
+      <Route path="/unauthorized" element={<UnauthorizedPage />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }

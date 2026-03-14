@@ -42,9 +42,9 @@ Give existing backend features a proper UI.
 
 | # | Item | Priority | Status |
 |---|------|----------|--------|
-| 16.1 | **Users management page** — `/admin/users` with DataTable, invite modal, role editing, deactivation. | Medium | ⬜ |
-| 16.2 | **Styled 404 and unauthorized pages** — Replace inline `<div>` placeholders with proper page components. | Medium | ⬜ |
-| 16.3 | **Loading skeleton for initial auth check** — Show centered spinner or skeleton while `AuthContext.isLoading` is true. | Medium | ⬜ |
+| 16.1 | **Users management page** — `/admin/users` with DataTable, invite modal, role editing, deactivation. | Medium | ✅ |
+| 16.2 | **Styled 404 and unauthorized pages** — Replace inline `<div>` placeholders with proper page components. | Medium | ✅ |
+| 16.3 | **Loading skeleton for initial auth check** — Show centered spinner or skeleton while `AuthContext.isLoading` is true. | Medium | ✅ |
 
 ---
 
