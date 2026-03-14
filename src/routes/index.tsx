@@ -6,7 +6,9 @@ import { LoginPage } from '../pages/Login/LoginPage';
 import { RegisterPage } from '../pages/Register/RegisterPage';
 import { AcceptInvitePage } from '../pages/AcceptInvite/AcceptInvitePage';
 import { ForgotPasswordPage } from '../pages/ForgotPassword/ForgotPasswordPage';
+import { ResetPasswordPage } from '../pages/ResetPassword/ResetPasswordPage';
 import { DashboardPage } from '../pages/Admin/Dashboard/DashboardPage';
+import { ProfilePage } from '../pages/Settings/ProfilePage';
 
 export function AppRoutes() {
   return (
@@ -17,11 +19,13 @@ export function AppRoutes() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/accept-invite" element={<AcceptInvitePage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
       </Route>
 
       {/* Protected routes */}
       <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
         <Route path="/admin/dashboard" element={<DashboardPage />} />
+        <Route path="/settings/profile" element={<ProfilePage />} />
       </Route>
 
       {/* Fallback */}

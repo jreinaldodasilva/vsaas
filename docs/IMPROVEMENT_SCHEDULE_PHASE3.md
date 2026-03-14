@@ -29,10 +29,10 @@ Close remaining UX gaps so every auth and CRUD flow has a working frontend.
 
 | # | Item | Priority | Status |
 |---|------|----------|--------|
-| 11.1 | **ResetPasswordPage** — `/reset-password?token=xxx` page that calls `POST /auth/reset-password`. | Medium | ⬜ |
-| 11.2 | **DataTable component** — Reusable table with pagination, sorting, search, loading states. Place in `src/components/UI/Table/`. | Medium | ⬜ |
-| 11.3 | **Toast/notification system** — Wire `react-hot-toast` (already installed) into a `useToast` hook. Show success/error toasts on mutations. | Medium | ⬜ |
-| 11.4 | **Profile/settings page** — `/settings/profile` page where users can change name and password. | Medium | ⬜ |
+| 11.1 | **ResetPasswordPage** — `/reset-password?token=xxx` page that calls `POST /auth/reset-password`. | Medium | ✅ |
+| 11.2 | **DataTable component** — Reusable table with pagination, sorting, search, loading states. Place in `src/components/UI/Table/`. | Medium | ✅ |
+| 11.3 | **Toast/notification system** — Wire `react-hot-toast` (already installed) into a `useToast` hook. Show success/error toasts on mutations. | Medium | ✅ |
+| 11.4 | **Profile/settings page** — `/settings/profile` page where users can change name and password. | Medium | ✅ |
 
 ---
 

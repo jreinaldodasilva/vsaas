@@ -5,3 +5,5 @@ export { StatusBadge } from './StatusBadge/StatusBadge';
 export { EmptyState } from './EmptyState/EmptyState';
 export { PasswordInput } from './PasswordInput/PasswordInput';
 export { ConnectionBanner } from './ConnectionBanner/ConnectionBanner';
+export { DataTable } from './Table/DataTable';
+export type { Column } from './Table/DataTable';

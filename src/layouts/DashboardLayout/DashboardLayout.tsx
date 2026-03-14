@@ -24,6 +24,9 @@ export function DashboardLayout() {
           <NavLink to="/admin/dashboard" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
             Dashboard
           </NavLink>
+          <NavLink to="/settings/profile" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+            Meu perfil
+          </NavLink>
           {/* Add nav links for your modules here */}
         </nav>
         <div className="sidebar-footer">
