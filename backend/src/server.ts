@@ -4,6 +4,7 @@ import { connectToDatabase, closeDatabaseConnection } from './config/database/da
 import redisClient from './config/database/redis';
 import { emailQueue, emailWorker } from './queues/emailQueue';
 import { auditCleanupQueue, auditCleanupWorker, scheduleAuditCleanup } from './queues/auditCleanupQueue';
+import { registerAuthEventListeners } from './services/auth/authEventListeners';
 import logger from './config/logger';
 
 initializeMonitoring();
@@ -25,6 +26,7 @@ const start = async () => {
   });
 
   await scheduleAuditCleanup();
+  registerAuthEventListeners();
 
   const gracefulShutdown = async (signal: string): Promise<void> => {
     logger.info(`${signal} received. Shutting down gracefully...`);

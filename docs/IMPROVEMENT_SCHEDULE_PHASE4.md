@@ -17,9 +17,9 @@ Enforce existing security policies and close abuse vectors.
 
 | # | Item | Priority | Status |
 |---|------|----------|--------|
-| 14.1 | **Enforce password policy** — Add shared `validatePasswordStrength()` using `SECURITY_POLICY` config. Apply in register, accept-invite, reset-password, and change-password flows. Currently only `minLength: 8` is checked. | High | ⬜ |
-| 14.2 | **Account lockout notification** — Emit `AUTH_EVENTS.ACCOUNT_LOCKED` and queue email when `incLoginAttempts()` triggers a lock. | High | ⬜ |
-| 14.3 | **Invite rate limiting** — Add dedicated rate limiter to `POST /tenants/:id/invite` (20/hour per tenant). | High | ⬜ |
+| 14.1 | **Enforce password policy** — Add shared `validatePasswordStrength()` using `SECURITY_POLICY` config. Apply in register, accept-invite, reset-password, and change-password flows. Currently only `minLength: 8` is checked. | High | ✅ |
+| 14.2 | **Account lockout notification** — Emit `AUTH_EVENTS.ACCOUNT_LOCKED` and queue email when `incLoginAttempts()` triggers a lock. | High | ✅ |
+| 14.3 | **Invite rate limiting** — Add dedicated rate limiter to `POST /tenants/:id/invite` (20/hour per tenant). | High | ✅ |
 
 ---
 

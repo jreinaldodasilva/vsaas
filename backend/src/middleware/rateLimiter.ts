@@ -72,6 +72,14 @@ export const passwordResetLimiter = createRateLimiter({
   keyGenerator: (req) => (req as AuthenticatedRequest).user?.id || req.ip || 'unknown',
 });
 
+export const inviteLimiter = createRateLimiter({
+  windowMs: 60 * 60 * 1000,
+  max: 20,
+  message: 'Muitos convites enviados. Tente novamente em 1 hora.',
+  prefix: 'invite',
+  keyGenerator: (req) => `tenant_${req.params.id || (req as AuthenticatedRequest).user?.tenantId || req.ip}`,
+});
+
 export const contactLimiter = createRateLimiter({
   windowMs: RATE_LIMIT.WINDOW_MS,
   max: RATE_LIMIT.CONTACT_MAX,

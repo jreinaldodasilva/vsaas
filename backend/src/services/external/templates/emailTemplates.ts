@@ -25,6 +25,15 @@ export const emailTemplates = {
       <p style="font-size:13px;color:#666">Se você não solicitou, ignore este e-mail.</p>`),
   }),
 
+  accountLocked: (name: string) => ({
+    subject: 'Conta bloqueada temporariamente',
+    html: layout(`<h2>Olá, ${name}</h2>
+      <p>Sua conta foi bloqueada temporariamente devido a múltiplas tentativas de login malsucedidas.</p>
+      <p>Se não foi você, recomendamos redefinir sua senha imediatamente:</p>
+      <p><a class="btn" href="${baseUrl}/forgot-password">Redefinir senha</a></p>
+      <p style="font-size:13px;color:#666">A conta será desbloqueada automaticamente após o período de bloqueio.</p>`),
+  }),
+
   invite: (inviterName: string, tenantName: string, token: string, role: string) => ({
     subject: `Convite para ${tenantName}`,
     html: layout(`<h2>Você foi convidado!</h2>

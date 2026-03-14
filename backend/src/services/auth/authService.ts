@@ -13,6 +13,7 @@ import { queueService } from '../queue/queueService';
 import { emailTemplates } from '../external/templates/emailTemplates';
 import { InviteToken } from '../../models/InviteToken';
 import * as crypto from 'crypto';
+import { validatePasswordStrength } from './passwordValidator';
 
 export interface LoginData { email: string; password: string; }
 export interface DeviceInfo { userAgent?: string; ipAddress?: string; deviceId?: string; }
@@ -119,6 +120,13 @@ class AuthService {
     const isMatch = await user.comparePassword(data.password);
     if (!isMatch) {
       await user.incLoginAttempts();
+      if (user.isLocked()) {
+        eventBus.emit(AUTH_EVENTS.ACCOUNT_LOCKED, {
+          userId: user._id?.toString(),
+          email: user.email,
+          lockUntil: user.lockUntil,
+        }).catch(() => {});
+      }
       throw new UnauthorizedError('E-mail ou senha inválidos');
     }
     if (!user.isActive) throw new UnauthorizedError('Conta desativada');
@@ -149,6 +157,8 @@ class AuthService {
   }
 
   async register(data: RegisterData, deviceInfo?: DeviceInfo) {
+    validatePasswordStrength(data.password);
+
     const slug = data.companyName
       .toLowerCase()
       .trim()
@@ -218,6 +228,7 @@ class AuthService {
 
   async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<void> {
     if (currentPassword === newPassword) throw new ValidationError('Nova senha deve ser diferente da atual');
+    validatePasswordStrength(newPassword);
     const user = await User.findById(userId).select('+password') as any;
     if (!user) throw new NotFoundError('Usuário');
     if (!(await user.comparePassword(currentPassword))) throw new UnauthorizedError('Senha atual incorreta');
@@ -243,6 +254,7 @@ class AuthService {
   }
 
   async resetPasswordWithToken(token: string, newPassword: string): Promise<void> {
+    validatePasswordStrength(newPassword);
     const hashedToken = hashPasswordResetToken(token);
     const user = await User.findOne({
       passwordResetToken: hashedToken,
@@ -286,6 +298,7 @@ class AuthService {
   }
 
   async acceptInvite(token: string, name: string, password: string, deviceInfo?: DeviceInfo) {
+    validatePasswordStrength(password);
     const invite = await InviteToken.findOne({ token, acceptedAt: null, expiresAt: { $gt: new Date() } });
     if (!invite) throw new UnauthorizedError('Convite inválido ou expirado');
 
