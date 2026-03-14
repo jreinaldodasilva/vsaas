@@ -29,10 +29,10 @@ Fix response inconsistencies and type mismatches.
 
 | # | Item | Priority | Status |
 |---|------|----------|--------|
-| 15.1 | **Fix response envelope double-wrapping** — Audit routes that manually return `{ success, data }` while `responseWrapper` also wraps. Remove manual wrapping or bypass wrapper where needed. | Medium | ⬜ |
-| 15.2 | **Export InviteToken from models index** — Add to `backend/src/models/index.ts`. | Medium | ⬜ |
-| 15.3 | **Add `hasNext`/`hasPrev` to backend pagination** — Align `BaseRepository.findPaginated()` output with `PaginatedData` type from `@vsaas/types`. | Medium | ⬜ |
-| 15.4 | **Fix health endpoint database response time** — Actually measure MongoDB ping time instead of hardcoding `0`. | Medium | ⬜ |
+| 15.1 | **Fix response envelope double-wrapping** — Audit routes that manually return `{ success, data }` while `responseWrapper` also wraps. Remove manual wrapping or bypass wrapper where needed. | Medium | ✅ |
+| 15.2 | **Export InviteToken from models index** — Add to `backend/src/models/index.ts`. | Medium | ✅ |
+| 15.3 | **Add `hasNext`/`hasPrev` to backend pagination** — Align `BaseRepository.findPaginated()` output with `PaginatedData` type from `@vsaas/types`. | Medium | ✅ |
+| 15.4 | **Fix health endpoint database response time** — Actually measure MongoDB ping time instead of hardcoding `0`. | Medium | ✅ |
 
 ---
 

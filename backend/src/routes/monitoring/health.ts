@@ -7,6 +7,13 @@ const router: Router = Router();
 
 router.get('/', async (_req: Request, res: Response) => {
   const dbStatus = mongoose.connection.readyState === 1 ? 'healthy' : 'unhealthy';
+  let dbResponseTime = 0;
+  try {
+    const start = Date.now();
+    await mongoose.connection.db!.admin().ping();
+    dbResponseTime = Date.now() - start;
+  } catch (_) {}
+
   let redisStatus = 'unhealthy';
   let redisResponseTime = 0;
   try {
@@ -24,7 +31,7 @@ router.get('/', async (_req: Request, res: Response) => {
       timestamp: new Date().toISOString(),
       uptime: Math.floor(process.uptime()),
       checks: {
-        database: { status: dbStatus, responseTime: 0 },
+        database: { status: dbStatus, responseTime: dbResponseTime },
         redis: { status: redisStatus, responseTime: redisResponseTime },
       },
     },

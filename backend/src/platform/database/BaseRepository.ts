@@ -8,6 +8,8 @@ export interface PaginatedResult<T> {
   page: number;
   limit: number;
   totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
 }
 
 export interface QueryOptions {
@@ -78,7 +80,7 @@ export abstract class BaseRepository<T extends Document> {
       this.model.countDocuments(merged),
     ]);
 
-    return { items, total, page, limit, totalPages: Math.ceil(total / limit) };
+    return { items, total, page, limit, totalPages: Math.ceil(total / limit), hasNext: page < Math.ceil(total / limit), hasPrev: page > 1 };
   }
 
   async findOne(filter: FilterQuery<T> = {}): Promise<T | null> {
