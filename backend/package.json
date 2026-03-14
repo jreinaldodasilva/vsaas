@@ -22,7 +22,8 @@
     "migrate:up": "migrate-mongo up",
     "migrate:down": "migrate-mongo down",
     "migrate:status": "migrate-mongo status",
-    "seed:test": "NODE_ENV=development ts-node -r tsconfig-paths/register scripts/seedTestData.ts"
+    "seed:test": "NODE_ENV=development ts-node -r tsconfig-paths/register scripts/seedTestData.ts",
+    "migrate:tenancy": "ts-node -r tsconfig-paths/register scripts/migrate-add-tenancy.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.922.0",
