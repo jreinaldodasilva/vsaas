@@ -1,6 +1,8 @@
 import { initializeMonitoring } from './config/monitoring';
 import { validateEnv } from './config/env';
 import { connectToDatabase, closeDatabaseConnection } from './config/database/database';
+import redisClient from './config/database/redis';
+import { emailQueue, emailWorker } from './queues/emailQueue';
 import logger from './config/logger';
 
 initializeMonitoring();
@@ -23,8 +25,22 @@ const start = async () => {
 
   const gracefulShutdown = async (signal: string): Promise<void> => {
     logger.info(`${signal} received. Shutting down gracefully...`);
+
     server.close(async () => {
       logger.info('HTTP server closed');
+      try {
+        await emailWorker.close();
+        await emailQueue.close();
+        logger.info('BullMQ worker and queue closed');
+      } catch (err) {
+        logger.error({ err }, 'Error closing BullMQ');
+      }
+      try {
+        await redisClient.quit();
+        logger.info('Redis connection closed');
+      } catch (err) {
+        logger.error({ err }, 'Error closing Redis');
+      }
       try {
         await closeDatabaseConnection();
       } catch (err) {
@@ -32,6 +48,12 @@ const start = async () => {
       }
       process.exit(0);
     });
+
+    // Force exit after 10s if graceful shutdown stalls
+    setTimeout(() => {
+      logger.error('Graceful shutdown timed out, forcing exit');
+      process.exit(1);
+    }, 10000).unref();
   };
 
   process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));

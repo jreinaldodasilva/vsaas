@@ -37,7 +37,7 @@ jobs:
       - name: Type check
         run: npm run type-check
 
-      - name: Lint
+      - name: Lint frontend
         run: npm run lint
 
       - name: Frontend tests
@@ -51,5 +51,6 @@ jobs:
           JWT_SECRET: test-jwt-secret-min-64-chars-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
           JWT_REFRESH_SECRET: test-refresh-secret-min-64-chars-aaaaaaaaaaaaaaaaaaaaaaaaaaaa
           PORTAL_JWT_SECRET: test-portal-secret-min-64-chars-aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          CSRF_SECRET: test-csrf-secret-min-32-chars-aaa
           FRONTEND_URL: http://localhost:3000
         run: cd backend && npm run test:ci

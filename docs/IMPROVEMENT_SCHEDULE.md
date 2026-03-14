@@ -30,14 +30,14 @@ Items that improve onboarding, local dev, and CI reliability.
 
 | # | Item | Priority | Status |
 |---|------|----------|--------|
-| 2.1 | **Add setup script / `.env` bootstrapping** — New users hit `validateEnv` errors immediately. Add a `scripts/setup.sh` that copies `.env.example` → `.env` if missing, runs `npm install`, and seeds secrets. | Medium | ⬜ |
-| 2.2 | **Complete graceful shutdown** — `server.ts` closes HTTP + MongoDB but not Redis or BullMQ. Add `redisClient.quit()` and queue worker cleanup to shutdown sequence. | Medium | ⬜ |
-| 2.3 | **Align MongoDB versions** — Docker Compose uses `mongo:7`, CI uses `mongo:8`. Pick one and align both. | Medium | ⬜ |
-| 2.4 | **Align Zod versions** — Root has `zod@^4`, backend has `zod@^3`. Pin both to same major to avoid schema incompatibilities. | Medium | ⬜ |
-| 2.5 | **Move `@types/react` and `@types/react-dom` to `devDependencies`** — Currently in `dependencies` in root `package.json`. | Low | ⬜ |
-| 2.6 | **Clean empty frontend directories** — 12 empty placeholder dirs (`LGPD/`, `Navigation/`, `common/`, `Form/`, `Table/`, `Toast/`, `hooks/`, `types/`, `utils/`, `services/base/`, `services/interceptors/`, `Notifications/`). Add `.gitkeep` or remove. | Low | ⬜ |
-| 2.7 | **Add `.gitkeep` to `backend/src/modules/domain/`** — Preserves directory structure for CLI generator. | Low | ⬜ |
-| 2.8 | **Verify CI runs platform tests and frontend tests** — Confirm Jest `testMatch` includes platform tests. Confirm `vitest` runs in CI after `npm ci`. | Medium | ⬜ |
+| 2.1 | **Add setup script / `.env` bootstrapping** — New users hit `validateEnv` errors immediately. Add a `scripts/setup.sh` that copies `.env.example` → `.env` if missing, runs `npm install`, and seeds secrets. | Medium | ✅ |
+| 2.2 | **Complete graceful shutdown** — `server.ts` closes HTTP + MongoDB but not Redis or BullMQ. Add `redisClient.quit()` and queue worker cleanup to shutdown sequence. | Medium | ✅ |
+| 2.3 | **Align MongoDB versions** — Docker Compose uses `mongo:7`, CI uses `mongo:8`. Pick one and align both. | Medium | ✅ |
+| 2.4 | **Align Zod versions** — Root has `zod@^4`, backend has `zod@^3`. Pin both to same major to avoid schema incompatibilities. | Medium | ✅ |
+| 2.5 | **Move `@types/react` and `@types/react-dom` to `devDependencies`** — Currently in `dependencies` in root `package.json`. | Low | ✅ |
+| 2.6 | **Clean empty frontend directories** — 12 empty placeholder dirs (`LGPD/`, `Navigation/`, `common/`, `Form/`, `Table/`, `Toast/`, `hooks/`, `types/`, `utils/`, `services/base/`, `services/interceptors/`, `Notifications/`). Add `.gitkeep` or remove. | Low | ✅ |
+| 2.7 | **Add `.gitkeep` to `backend/src/modules/domain/`** — Preserves directory structure for CLI generator. | Low | ✅ |
+| 2.8 | **Verify CI runs platform tests and frontend tests** — Confirm Jest `testMatch` includes platform tests. Confirm `vitest` runs in CI after `npm ci`. | Medium | ✅ |
 
 ---
 
