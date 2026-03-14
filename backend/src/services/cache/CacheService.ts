@@ -36,8 +36,12 @@ export class CacheService {
 
   async invalidatePattern(pattern: string): Promise<void> {
     try {
-      const keys = await redisClient.keys(`${this.prefix}:${pattern}`);
-      if (keys.length > 0) await redisClient.del(...keys);
+      let cursor = '0';
+      do {
+        const [next, keys] = await redisClient.scan(cursor, 'MATCH', `${this.prefix}:${pattern}`, 'COUNT', 100);
+        cursor = next;
+        if (keys.length > 0) await redisClient.del(...keys);
+      } while (cursor !== '0');
     } catch (err) {
       logger.warn({ err, pattern }, 'Cache invalidatePattern failed');
     }

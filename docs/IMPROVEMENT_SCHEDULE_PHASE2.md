@@ -17,9 +17,9 @@ Critical features that every SaaS boilerplate user will need immediately.
 
 | # | Item | Priority | Status |
 |---|------|----------|--------|
-| 6.1 | **Tenant self-service registration** — Add `POST /api/v1/auth/register` endpoint that creates tenant + owner in one step. Add `/register` frontend page with name, email, password, company name fields. Wire into AuthContext. | High | ⬜ |
-| 6.2 | **Stripe webhook endpoint** — Add `POST /api/v1/webhooks/stripe` with signature verification (`stripe.webhooks.constructEvent`). Handle `checkout.session.completed`, `invoice.payment_succeeded`, `invoice.payment_failed`, `customer.subscription.updated/deleted`. Emit billing events via EventBus. | High | ⬜ |
-| 6.3 | **Replace `KEYS` with `SCAN` in CacheService** — `invalidatePattern` uses `KEYS` which is O(N) and blocks Redis. Replace with cursor-based `SCAN` iteration. | High | ⬜ |
+| 6.1 | **Tenant self-service registration** — Add `POST /api/v1/auth/register` endpoint that creates tenant + owner in one step. Add `/register` frontend page with name, email, password, company name fields. Wire into AuthContext. | High | ✅ |
+| 6.2 | **Stripe webhook endpoint** — Add `POST /api/v1/webhooks/stripe` with signature verification (`stripe.webhooks.constructEvent`). Handle `checkout.session.completed`, `invoice.payment_succeeded`, `invoice.payment_failed`, `customer.subscription.updated/deleted`. Emit billing events via EventBus. | High | ✅ |
+| 6.3 | **Replace `KEYS` with `SCAN` in CacheService** — `invalidatePattern` uses `KEYS` which is O(N) and blocks Redis. Replace with cursor-based `SCAN` iteration. | High | ✅ |
 
 ---
 

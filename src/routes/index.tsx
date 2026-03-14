@@ -3,6 +3,7 @@ import { AuthLayout } from '../layouts/AuthLayout/AuthLayout';
 import { DashboardLayout } from '../layouts/DashboardLayout/DashboardLayout';
 import { ProtectedRoute } from '../components/Auth/ProtectedRoute/ProtectedRoute';
 import { LoginPage } from '../pages/Login/LoginPage';
+import { RegisterPage } from '../pages/Register/RegisterPage';
 import { ForgotPasswordPage } from '../pages/ForgotPassword/ForgotPasswordPage';
 import { DashboardPage } from '../pages/Admin/Dashboard/DashboardPage';
 
@@ -12,6 +13,7 @@ export function AppRoutes() {
       {/* Public routes */}
       <Route element={<AuthLayout />}>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       </Route>
 

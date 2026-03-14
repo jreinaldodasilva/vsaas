@@ -117,6 +117,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 // ─── Body Parsing & Security ──────────────────────────────────────────────────
+app.use('/api/v1/webhooks/stripe', express.raw({ type: 'application/json' }));
 app.use(express.json({ limit: '10mb', strict: true }));
 app.use(express.urlencoded({ extended: true, limit: '10mb', parameterLimit: 100 }));
 app.use(cookieParser());
@@ -131,7 +132,7 @@ app.get('/api/csrf-token', (req: any, res: any) => res.json({ csrfToken: generat
 
 app.use('/api', (req: any, res: any, next: any) => {
   if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return next();
-  const skipPaths = ['/api/v1/auth/refresh', '/api/v1/auth/logout', '/api/v1/auth/login', '/api/csrf-token'];
+  const skipPaths = ['/api/v1/auth/refresh', '/api/v1/auth/logout', '/api/v1/auth/login', '/api/v1/auth/register', '/api/v1/webhooks/stripe', '/api/csrf-token'];
   if (skipPaths.some(p => req.originalUrl.startsWith(p))) return next();
   csrfProtection(req, res, next);
 });

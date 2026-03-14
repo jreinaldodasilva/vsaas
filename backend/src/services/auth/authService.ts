@@ -7,9 +7,12 @@ import { generateAccessToken, generateRefreshTokenString, TokenPayload } from '.
 import { generatePasswordResetToken, hashPasswordResetToken } from './passwordHelpers';
 import { tokenBlacklistService } from './tokenBlacklistService';
 import { env } from '../../config/env';
+import { tenantService } from '../../platform/tenants/services/tenant.service';
+import { eventBus, AUTH_EVENTS } from '../../platform/events';
 
 export interface LoginData { email: string; password: string; }
 export interface DeviceInfo { userAgent?: string; ipAddress?: string; deviceId?: string; }
+export interface RegisterData { name: string; email: string; password: string; companyName: string; }
 
 class AuthService {
   private readonly JWT_SECRET = env.jwt.secret;
@@ -134,6 +137,50 @@ class AuthService {
       success: true as const,
       data: {
         user: { id: user._id?.toString(), name: user.name, email: user.email, role: user.role },
+        accessToken,
+        refreshToken: refreshDoc.token,
+        expiresIn: this.ACCESS_TOKEN_EXPIRES,
+      },
+    };
+  }
+
+  async register(data: RegisterData, deviceInfo?: DeviceInfo) {
+    const slug = data.companyName
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+
+    const { tenant, owner } = await tenantService.create({
+      name: data.companyName,
+      slug,
+      ownerName: data.name,
+      ownerEmail: data.email,
+      ownerPassword: data.password,
+    });
+
+    const payload: TokenPayload = {
+      userId: owner._id?.toString(),
+      email: owner.email,
+      role: (owner as any).role,
+      tenantId: tenant._id?.toString(),
+    };
+
+    const accessToken = this.generateAccessToken(payload);
+    const refreshDoc = await this.createRefreshToken(owner._id?.toString(), deviceInfo);
+
+    await eventBus.emit(AUTH_EVENTS.USER_REGISTERED, {
+      userId: owner._id?.toString(),
+      email: owner.email,
+      tenantId: tenant._id?.toString(),
+      tenantSlug: tenant.slug,
+    });
+
+    return {
+      success: true as const,
+      data: {
+        user: { id: owner._id?.toString(), name: (owner as any).name, email: owner.email, role: (owner as any).role },
+        tenant: { id: tenant._id?.toString(), name: tenant.name, slug: tenant.slug },
         accessToken,
         refreshToken: refreshDoc.token,
         expiresIn: this.ACCESS_TOKEN_EXPIRES,

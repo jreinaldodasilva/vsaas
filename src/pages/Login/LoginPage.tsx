@@ -10,6 +10,9 @@ export function LoginPage() {
       <p>
         <Link to="/forgot-password">Esqueceu a senha?</Link>
       </p>
+      <p>
+        Não tem uma conta? <Link to="/register">Criar conta</Link>
+      </p>
     </div>
   );
 }

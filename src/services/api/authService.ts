@@ -1,7 +1,17 @@
 import { http } from '../http';
-import type { User, LoginRequest } from '@vsaas/types';
+import type { User, LoginRequest, Tenant } from '@vsaas/types';
+
+interface RegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+  companyName: string;
+}
 
 export const authService = {
+  register: (data: RegisterRequest) =>
+    http.post<{ success: true; data: { user: User; tenant: Tenant; expiresIn: string } }>('/api/v1/auth/register', data),
+
   login: (data: LoginRequest) =>
     http.post<{ success: true; data: { user: User; expiresIn: string } }>('/api/v1/auth/login', data),
 

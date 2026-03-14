@@ -6,6 +6,7 @@ import { auditService } from '../services/admin/auditService';
 import { UnauthorizedError } from '../utils/errors';
 import {
   loginValidation,
+  registerValidation,
   changePasswordValidation,
   forgotPasswordValidation,
   resetPasswordValidation,
@@ -23,6 +24,25 @@ const cookieOpts = (maxAge: number) => ({
   secure: process.env.NODE_ENV === 'production',
   sameSite: 'strict' as const,
   maxAge,
+});
+
+router.post('/register', registerValidation, validateRequest, async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const deviceInfo = {
+      userAgent: req.headers['user-agent'],
+      ipAddress: req.ip,
+      deviceId: req.headers['x-device-id'] as string,
+    };
+    const result = await authService.register(req.body, deviceInfo);
+    const { accessToken, refreshToken, expiresIn, user, tenant } = result.data;
+
+    res.cookie(ACCESS_COOKIE, accessToken, cookieOpts(15 * 60 * 1000));
+    res.cookie(REFRESH_COOKIE, refreshToken, cookieOpts(7 * 24 * 60 * 60 * 1000));
+
+    return res.status(201).json({ success: true, data: { user, tenant, expiresIn } });
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post('/login', loginValidation, validateRequest, async (req: Request, res: Response, next: NextFunction) => {
