@@ -80,6 +80,16 @@ vsaas/
 - **BaseRepository**: Abstract class that auto-injects `tenantId` from AsyncLocalStorage into every query.
 - **CLI Generator**: Scaffolds a complete domain module from a single command.
 
+## API Versioning
+
+All routes live under `/api/v1/`. When you need a breaking change:
+
+1. Create `backend/src/routes/v2/index.ts` — copy the v1 router and modify only the changed routes.
+2. Mount it in `app.ts`: `app.use('/api/v2', v2Routes);`
+3. Keep v1 running alongside v2 until clients migrate.
+4. Use the `Accept-Version` header or URL prefix — the boilerplate uses URL prefix by convention.
+5. Deprecate v1 by adding a `Sunset` response header with a date, then remove it after the deadline.
+
 ## Scripts
 
 | Command | Description |

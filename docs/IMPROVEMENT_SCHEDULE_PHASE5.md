@@ -53,9 +53,9 @@ Fill gaps that adopters would hit immediately.
 
 | # | Item | Priority | Status |
 |---|------|----------|--------|
-| 21.1 | **File upload service** — `StorageService` with local/S3 adapters, multer middleware, upload route. `.env.example` already has S3 config. | Medium | ⬜ |
-| 21.2 | **Outbound webhooks** — `WebhookSubscription` model, delivery queue via BullMQ, tenant-scoped CRUD routes. | Medium | ⬜ |
-| 21.3 | **API versioning docs** — Add section to README explaining the v1/v2 coexistence strategy and how to introduce a new version. | Low | ⬜ |
+| 21.1 | **File upload service** — `StorageService` with local/S3 adapters, multer middleware, upload route. `.env.example` already has S3 config. | Medium | ✅ |
+| 21.2 | **Outbound webhooks** — `WebhookSubscription` model, delivery queue via BullMQ, tenant-scoped CRUD routes. | Medium | ✅ |
+| 21.3 | **API versioning docs** — Add section to README explaining the v1/v2 coexistence strategy and how to introduce a new version. | Low | ✅ |
 
 ---
 

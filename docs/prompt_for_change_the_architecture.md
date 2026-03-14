@@ -2,15 +2,15 @@
 
 ## Role
 
-You are a **principal software architect and large-scale codebase refactoring expert**.
+You are a principal software architect and large-scale codebase refactoring expert.
 
-Your task is to analyze an existing **multi-tenant Vertical SaaS boilerplate repository named `vsaas`** and transform it into an architecture that supports **two independent commercial products** that can be distributed and sold separately.
+Your task is to analyze an existing multi-tenant Vertical SaaS boilerplate repository named `vsaas` and transform it into an architecture that supports two independent commercial products that can be distributed and sold separately.
 
-The original repository (`vsaas`) must remain **untouched as a backup**. New repositories must be created from it.
+The original repository (`vsaas`) must remain untouched as a backup. New repositories must be created from it.
 
-The architecture must introduce a **shared core repository** containing reusable logic, while the two final products remain independent repositories.
+The architecture must introduce a shared core repository containing reusable logic, while the two final products remain independent repositories.
 
-This prompt is intentionally **domain-agnostic**. The system may represent any type of business application.
+This prompt is intentionally domain-agnostic. The system may represent any type of business application.
 
 ---
 
@@ -18,55 +18,44 @@ This prompt is intentionally **domain-agnostic**. The system may represent any t
 
 Transform the original repository into the following ecosystem:
 
-```
-vsaas (original repository kept as backup)
+* `vsaas` (original repository kept as backup)
+* `vsaas-core`
+* `vsaas-saas-platform`
+* `vsaas-app-boilerplate`
 
-vsaas-core
-vsaas-saas-platform
-vsaas-app-boilerplate
-```
+Repository purposes:
 
-### Repository Purposes
+`vsaas-core`
 
-**vsaas-core**
+A shared repository containing reusable modules used by both products.
 
-Reusable modules shared by both products.
+`vsaas-saas-platform`
 
-**vsaas-saas-platform**
+A multi-tenant SaaS platform boilerplate.
 
-A **multi-tenant SaaS boilerplate platform**.
+`vsaas-app-boilerplate`
 
-**vsaas-app-boilerplate**
+A single-tenant business application boilerplate intended for one organization installation.
 
-A **single-tenant business application boilerplate**.
-
-Goals:
+Goals of the transformation:
 
 * avoid code duplication
 * allow both products to evolve independently
-* maintain a clean architecture
+* maintain a clean and maintainable architecture
 
 ---
 
 # Repository Creation Process
 
-Assume the current repository is named:
-
-```
-vsaas
-```
-
-This repository must be preserved as a **backup reference**.
+Assume the current repository is named `vsaas`. This repository must remain unchanged and serve as the reference and backup.
 
 ## Step 1 — Create New Repositories
 
-Create the following empty repositories:
+Create three new empty repositories:
 
-```
-vsaas-core
-vsaas-saas-platform
-vsaas-app-boilerplate
-```
+* `vsaas-core`
+* `vsaas-saas-platform`
+* `vsaas-app-boilerplate`
 
 ## Step 2 — Create the SaaS Platform Repository
 
@@ -85,7 +74,7 @@ git remote add origin git@github.com:ORG/vsaas-saas-platform.git
 git push -u origin main
 ```
 
-This repository becomes the **multi-tenant SaaS platform boilerplate**.
+This repository becomes the multi-tenant SaaS platform product.
 
 ## Step 3 — Create the Single-Tenant Repository
 
@@ -102,40 +91,23 @@ git remote add origin git@github.com:ORG/vsaas-app-boilerplate.git
 git push -u origin main
 ```
 
-This repository will later have **all multi-tenant logic removed**.
+This repository will later have all multi-tenant logic removed.
 
 ## Step 4 — Create the Shared Core Repository
 
-Create and initialize the core repository.
+Initialize the core repository.
 
 ```
 git clone git@github.com:ORG/vsaas-core.git
 ```
 
-Example structure:
-
-```
-vsaas-core
-
-/src
-
-/auth
-/database
-/domain
-/shared
-/utils
-/config
-```
+The core repository must contain only reusable logic that is independent of deployment model.
 
 ## Step 5 — Link the Core Repository
 
 Both product repositories must consume the shared core.
 
-Recommended method:
-
-```
-Git submodules
-```
+Recommended method: Git submodules.
 
 Example:
 
@@ -149,148 +121,74 @@ cd ../vsaas-app-boilerplate
 git submodule add git@github.com:ORG/vsaas-core.git core
 ```
 
-Final layout:
-
-```
-vsaas-saas-platform
-
-core/
-src/
-```
-
-and
-
-```
-vsaas-app-boilerplate
-
-core/
-src/
-```
-
 ---
 
 # Key Architectural Principles
 
-## 1. Strict Separation Between Domain and Platform
+## Separation Between Domain Logic and Platform Logic
 
-Separate two categories of logic.
+Two categories of logic must be separated during refactoring.
 
 ### Domain Logic
 
-Reusable application logic such as:
+Reusable application logic that represents the core business behavior of the system.
 
-```
-users
-entities
-records
-transactions
-notifications
-files
-reporting
-```
-
-This logic must be moved into **vsaas-core**.
+This logic must be extracted into the `vsaas-core` repository.
 
 Rules:
 
-* no tenant context
-* no platform-specific dependencies
+* must not depend on tenant context
+* must not depend on organization isolation
+* must not depend on SaaS subscription logic
 
 ### Platform Logic
 
-Deployment-specific logic such as:
+Deployment-specific infrastructure and platform behavior.
 
-```
-tenancy
-organization management
-subscription management
-provisioning
-platform administration
-```
+This logic must remain only inside the SaaS repository.
 
-This logic must remain **only inside `vsaas-saas-platform`**.
+Examples of platform concerns include:
+
+* multi-tenancy
+* organization or workspace management
+* subscription management
+* tenant provisioning
+* platform administration
 
 ---
 
-# Core Repository Design
+# Core Repository Requirements
 
-The shared repository must contain reusable modules.
-
-Example:
-
-```
-vsaas-core
-
-/src
-
-/auth
-/database
-/domain
-
-   /users
-   /records
-   /transactions
-   /notifications
-
-/shared
-/utils
-/config
-```
+The core repository must contain only reusable and deployment-independent modules.
 
 Rules:
 
 * no multi-tenant concepts
-* no SaaS billing
-* no platform administration
+* no SaaS billing logic
+* no platform administration logic
+* must be usable by both products
 
 ---
 
-# SaaS Platform Repository
+# SaaS Platform Repository Requirements
 
-Structure example:
+The SaaS repository contains platform-level functionality required to operate a multi-tenant SaaS product.
 
-```
-vsaas-saas-platform
-
-/src
-
-/platform
-/tenancy
-/organization-management
-/subscription-management
-/provisioning
-
-/modules
-/infrastructure
-```
-
-Responsibilities:
+Responsibilities include:
 
 * tenant isolation
 * organization management
-* SaaS subscriptions
-* onboarding
+* subscription handling
+* onboarding and provisioning
 * platform administration
 
-Imports reusable modules from **vsaas-core**.
+It must import reusable modules from `vsaas-core`.
 
 ---
 
-# Single-Tenant Repository
+# Single-Tenant Repository Requirements
 
-Structure example:
-
-```
-vsaas-app-boilerplate
-
-/src
-
-/app
-/auth
-/modules
-/dashboard
-/infrastructure
-```
+The single-tenant repository contains a simplified application intended for deployment for a single organization.
 
 Rules:
 
@@ -298,64 +196,34 @@ Rules:
 * no subscription logic
 * no tenant provisioning
 
-The system assumes **one organization instance only**.
+The system assumes one organization instance only.
 
 ---
 
 # Multi-Tenant Removal Requirements
 
-Inside the single-tenant repository remove fields such as:
+Inside the single-tenant repository remove elements related to tenancy such as:
 
-```
-tenant_id
-organization_id
-workspace_id
-```
+* tenant identifiers
+* organization identifiers
+* workspace identifiers
 
-Remove tables such as:
+Also remove database tables and logic related to:
 
-```
-tenants
-organizations
-workspaces
-subscriptions
-```
+* tenants
+* organizations
+* workspaces
+* subscriptions
 
-Queries must be simplified.
-
-Example transformation:
-
-Before:
-
-```
-SELECT * FROM entities
-WHERE tenant_id = ?
-```
-
-After:
-
-```
-SELECT * FROM entities
-```
+Queries must no longer filter by tenant.
 
 ---
 
 # Authorization Simplification
 
-Replace SaaS roles such as:
+Replace SaaS platform role models with a simplified authorization model appropriate for a single organization.
 
-```
-PLATFORM_ADMIN
-TENANT_ADMIN
-TENANT_USER
-```
-
-With simplified roles:
-
-```
-ADMIN
-USER
-```
+Remove platform-specific roles and keep only roles required for application-level access control.
 
 ---
 
@@ -363,49 +231,41 @@ USER
 
 Provide the following outputs.
 
-## 1. Architecture Overview
+1. Architecture Overview
 
-Explain the new architecture.
+Explain the new architecture and how the repositories interact.
 
-## 2. Repository Structures
+2. Repository Design
 
-Provide directory structures for:
+Describe the responsibilities of `vsaas-core`, `vsaas-saas-platform`, and `vsaas-app-boilerplate`.
 
-* vsaas-core
-* vsaas-saas-platform
-* vsaas-app-boilerplate
-
-## 3. Module Extraction Plan
+3. Module Extraction Plan
 
 Identify which modules must be moved into the core repository.
 
-## 4. SaaS Refactor Plan
+4. SaaS Refactor Plan
 
-Explain what remains in the SaaS repository.
+Explain what logic remains in the SaaS repository.
 
-## 5. Single-Tenant Refactor Plan
+5. Single-Tenant Refactor Plan
 
-Explain how to remove multi-tenant logic.
+Explain how to remove multi-tenant logic from the single-tenant application.
 
-## 6. Database Changes
+6. Database Changes
 
-Describe schema simplification for the single-tenant version.
+Describe how the schema must be simplified for the single-tenant version.
 
-## 7. Code Transformation Examples
+7. Code Transformation Examples
 
-Provide examples such as:
+Provide examples such as removing tenant filters, removing tenant middleware, and simplifying authentication.
 
-* removing tenant filters
-* removing tenant middleware
-* simplifying authentication
+8. Migration Steps
 
-## 8. Migration Steps
+Provide a step-by-step plan to migrate from the original `vsaas` repository to the new architecture.
 
-Provide a **step-by-step plan** to migrate from the original `vsaas` repository to the new architecture.
+9. Long-Term Maintenance Strategy
 
-## 9. Long-Term Maintenance Strategy
-
-Explain how both products can evolve independently while sharing the core.
+Explain how both products can evolve independently while sharing the core repository.
 
 ---
 
@@ -413,10 +273,10 @@ Explain how both products can evolve independently while sharing the core.
 
 * Do not break existing domain logic.
 * Avoid duplicated modules between repositories.
-* Keep the architecture framework-agnostic when possible.
+* Keep the architecture framework-agnostic whenever possible.
 
 ---
 
 # Final Goal
 
-Produce a **professional repository ecosystem** capable of supporting two independent commercial boilerplates while sharing a reusable and maintainable core codebase.
+Produce a professional repository ecosystem capable of supporting two independent commercial boilerplates while sharing a reusable and maintainable core codebase.

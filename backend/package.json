@@ -49,6 +49,7 @@
     "isomorphic-dompurify": "^2.26.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.0",
+    "multer": "^2.1.1",
     "nodemailer": "^6.10.1",
     "otplib": "^12.0.1",
     "pino": "^9.11.0",
@@ -70,6 +71,7 @@
     "@types/express": "^4.17.23",
     "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.1.0",
     "@types/node": "^20.19.11",
     "@types/nodemailer": "^6.4.19",
     "@types/supertest": "^6.0.3",
@@ -91,5 +93,8 @@
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.2"
   },
-  "engines": { "node": ">=18.0.0", "npm": ">=9.0.0" }
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
 }
