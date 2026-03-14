@@ -61,10 +61,10 @@ Items that fill gaps in the frontend boilerplate.
 
 | # | Item | Priority | Status |
 |---|------|----------|--------|
-| 4.1 | **Add 401 token refresh interceptor to `http.ts`** — No automatic refresh on token expiry. Users get silently logged out. Add retry logic that calls `authService.refresh()` on 401. | Medium | ⬜ |
-| 4.2 | **Wire Sentry or remove `@sentry/react`** — Installed but never initialized. Either add `Sentry.init()` in `index.tsx` or remove the dependency. | Low | ⬜ |
-| 4.3 | **Add `/forgot-password` route** — `LoginPage.tsx` links to it but no route exists. Hits 404 catch-all. | Low | ⬜ |
-| 4.4 | **Wire MSW or remove it** — MSW is installed with worker config but no mock handlers exist. Add `src/mocks/` with handler stubs or remove MSW. | Low | ⬜ |
+| 4.1 | **Add 401 token refresh interceptor to `http.ts`** — No automatic refresh on token expiry. Users get silently logged out. Add retry logic that calls `authService.refresh()` on 401. | Medium | ✅ |
+| 4.2 | **Wire Sentry or remove `@sentry/react`** — Installed but never initialized. Either add `Sentry.init()` in `index.tsx` or remove the dependency. | Low | ✅ |
+| 4.3 | **Add `/forgot-password` route** — `LoginPage.tsx` links to it but no route exists. Hits 404 catch-all. | Low | ✅ |
+| 4.4 | **Wire MSW or remove it** — MSW is installed with worker config but no mock handlers exist. Add `src/mocks/` with handler stubs or remove MSW. | Low | ✅ |
 
 ---
 
@@ -74,9 +74,9 @@ Items that help new users get started quickly.
 
 | # | Item | Priority | Status |
 |---|------|----------|--------|
-| 5.1 | **Add root `README.md`** — Quickstart: clone → setup → dev → generate first module. Architecture overview, tech stack, project structure. | Medium | ⬜ |
-| 5.2 | **Add `Makefile` or `justfile`** — Common commands: `make setup`, `make dev`, `make test`, `make generate module=invoices`. | Low | ⬜ |
-| 5.3 | **Remove last domain-specific TODO** — `cypress/e2e/authentication.cy.ts` line 30: `// TODO: Add domain-specific auth tests here`. | Low | ⬜ |
+| 5.1 | **Add root `README.md`** — Quickstart: clone → setup → dev → generate first module. Architecture overview, tech stack, project structure. | Medium | ✅ |
+| 5.2 | **Add `Makefile` or `justfile`** — Common commands: `make setup`, `make dev`, `make test`, `make generate module=invoices`. | Low | ✅ |
+| 5.3 | **Remove last domain-specific TODO** — `cypress/e2e/authentication.cy.ts` line 30: `// TODO: Add domain-specific auth tests here`. | Low | ✅ |
 
 ---
 

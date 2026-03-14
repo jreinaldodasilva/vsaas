@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { LoginForm } from '../../components/Auth/LoginForm/LoginForm';
 
 export function LoginPage() {
@@ -8,7 +8,7 @@ export function LoginPage() {
       <h2>Entrar</h2>
       <LoginForm onSuccess={() => navigate('/admin/dashboard')} />
       <p>
-        <a href="/forgot-password">Esqueceu a senha?</a>
+        <Link to="/forgot-password">Esqueceu a senha?</Link>
       </p>
     </div>
   );

@@ -23,6 +23,4 @@ describe('Authentication', () => {
     cy.get('button[type="submit"]').click();
     cy.url().should('include', '/admin/dashboard');
   });
-
-  // TODO: Add domain-specific auth tests here
 });

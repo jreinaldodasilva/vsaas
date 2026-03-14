@@ -4,10 +4,22 @@ const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 interface RequestOptions extends RequestInit {
   params?: Record<string, string | number | boolean | undefined>;
+  _retry?: boolean;
+}
+
+let refreshPromise: Promise<void> | null = null;
+
+async function refreshToken(): Promise<void> {
+  const res = await fetch(`${BASE_URL}/api/v1/auth/refresh`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+  });
+  if (!res.ok) throw new Error('Refresh failed');
 }
 
 async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
-  const { params, ...init } = options;
+  const { params, _retry, ...init } = options;
 
   let url = `${BASE_URL}${path}`;
   if (params) {
@@ -24,6 +36,19 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
     headers: { 'Content-Type': 'application/json', ...init.headers },
     ...init,
   });
+
+  if (res.status === 401 && !_retry && !path.includes('/auth/')) {
+    // Deduplicate concurrent refresh attempts
+    if (!refreshPromise) {
+      refreshPromise = refreshToken().finally(() => { refreshPromise = null; });
+    }
+    try {
+      await refreshPromise;
+      return request<T>(path, { ...options, _retry: true });
+    } catch {
+      // Refresh failed — fall through to throw 401
+    }
+  }
 
   if (!res.ok) {
     const error = await res.json().catch(() => ({ message: res.statusText }));

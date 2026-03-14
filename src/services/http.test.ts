@@ -95,4 +95,37 @@ describe('http', () => {
     const result = await http.get('/api/list');
     expect(result).toEqual({ data: [1, 2, 3] });
   });
+
+  describe('401 token refresh', () => {
+    it('retries request after successful token refresh', async () => {
+      mockFetch
+        .mockResolvedValueOnce({ ok: false, status: 401, statusText: 'Unauthorized', json: () => Promise.resolve({ message: 'Token expired' }) })
+        .mockResolvedValueOnce(jsonResponse({})) // refresh call
+        .mockResolvedValueOnce(jsonResponse({ data: 'retried' })); // retry
+
+      const result = await http.get('/api/protected');
+      expect(result).toEqual({ data: 'retried' });
+      expect(mockFetch).toHaveBeenCalledTimes(3);
+    });
+
+    it('throws 401 when refresh also fails', async () => {
+      mockFetch
+        .mockResolvedValueOnce({ ok: false, status: 401, statusText: 'Unauthorized', json: () => Promise.resolve({ message: 'Expired' }) })
+        .mockResolvedValueOnce({ ok: false, status: 401, statusText: 'Unauthorized', json: () => Promise.resolve({}) }); // refresh fails
+
+      await expect(http.get('/api/protected')).rejects.toThrow('Expired');
+    });
+
+    it('does not retry for auth routes', async () => {
+      mockFetch.mockResolvedValue({
+        ok: false,
+        status: 401,
+        statusText: 'Unauthorized',
+        json: () => Promise.resolve({ message: 'Bad creds' }),
+      });
+
+      await expect(http.post('/api/v1/auth/login', {})).rejects.toThrow('Bad creds');
+      expect(mockFetch).toHaveBeenCalledTimes(1); // no refresh attempt
+    });
+  });
 });
