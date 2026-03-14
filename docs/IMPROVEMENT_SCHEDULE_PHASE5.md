@@ -17,9 +17,9 @@ Small fixes that improve first-clone experience.
 
 | # | Item | Priority | Status |
 |---|------|----------|--------|
-| 18.1 | **Add `.gitkeep` to `backend/src/modules/domain/`** — Directory doesn't exist until CLI runs. Make it visible in the repo. | High | ⬜ |
-| 18.2 | **Typed frontend API errors** — Create `ApiError` class in `src/services/http.ts` with `status`, `code`, `details` matching backend `ApiResult` error shape. Replace generic `Error` throws. | High | ⬜ |
-| 18.3 | **Wire backend lint into CI** — `npm run lint` only runs frontend. Add `lint:backend` script and call it in GitHub Actions. | Medium | ⬜ |
+| 18.1 | **Add `.gitkeep` to `backend/src/modules/domain/`** — Directory doesn't exist until CLI runs. Make it visible in the repo. | High | ✅ |
+| 18.2 | **Typed frontend API errors** — Create `ApiError` class in `src/services/http.ts` with `status`, `code`, `details` matching backend `ApiResult` error shape. Replace generic `Error` throws. | High | ✅ |
+| 18.3 | **Wire backend lint into CI** — `npm run lint` only runs frontend. Add `lint:backend` script and call it in GitHub Actions. | Medium | ✅ |
 
 ---
 

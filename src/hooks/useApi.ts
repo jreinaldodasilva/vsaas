@@ -5,17 +5,17 @@ import {
   type UseQueryOptions,
   type UseMutationOptions,
 } from '@tanstack/react-query';
-import { http } from '../services/http';
+import { http, ApiError } from '../services/http';
 
-type HttpError = Error & { status?: number; code?: string };
+export type { ApiError };
 
 export function useApiQuery<T>(
   key: string[],
   path: string,
   params?: Record<string, string | number | boolean | undefined>,
-  options?: Omit<UseQueryOptions<T, HttpError>, 'queryKey' | 'queryFn'>,
+  options?: Omit<UseQueryOptions<T, ApiError>, 'queryKey' | 'queryFn'>,
 ) {
-  return useQuery<T, HttpError>({
+  return useQuery<T, ApiError>({
     queryKey: key,
     queryFn: () => http.get<T>(path, params),
     ...options,
@@ -25,14 +25,14 @@ export function useApiQuery<T>(
 export function useApiMutation<TData = unknown, TBody = unknown>(
   method: 'post' | 'put' | 'patch' | 'delete',
   path: string | ((variables: TBody) => string),
-  options?: Omit<UseMutationOptions<TData, HttpError, TBody>, 'mutationFn'> & {
+  options?: Omit<UseMutationOptions<TData, ApiError, TBody>, 'mutationFn'> & {
     invalidateKeys?: string[][];
   },
 ) {
   const queryClient = useQueryClient();
   const { invalidateKeys, ...mutationOptions } = options ?? {};
 
-  return useMutation<TData, HttpError, TBody>({
+  return useMutation<TData, ApiError, TBody>({
     mutationFn: (body) => {
       const url = typeof path === 'function' ? path(body) : path;
       return method === 'delete'

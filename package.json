@@ -40,6 +40,8 @@
     "test:e2e": "cypress run",
     "test:e2e:open": "cypress open",
     "lint": "eslint src/**/*.{ts,tsx}",
+    "lint:backend": "cd backend && npm run lint",
+    "lint:all": "npm run lint && npm run lint:backend",
     "lint:fix": "eslint src/**/*.{ts,tsx} --fix",
     "type-check": "npm run type-check:frontend && npm run type-check:backend",
     "type-check:frontend": "tsc --noEmit",

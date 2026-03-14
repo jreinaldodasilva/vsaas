@@ -2,6 +2,25 @@
 
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    public readonly status: number,
+    public readonly code?: string,
+    public readonly details?: unknown,
+  ) {
+    super(message);
+    this.name = 'ApiError';
+  }
+
+  get isUnauthorized() { return this.status === 401; }
+  get isForbidden() { return this.status === 403; }
+  get isNotFound() { return this.status === 404; }
+  get isValidation() { return this.status === 422; }
+  get isRateLimit() { return this.status === 429; }
+  get isServer() { return this.status >= 500; }
+}
+
 interface RequestOptions extends RequestInit {
   params?: Record<string, string | number | boolean | undefined>;
   _retry?: boolean;
@@ -51,12 +70,13 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
   }
 
   if (!res.ok) {
-    const error = await res.json().catch(() => ({ message: res.statusText }));
-    throw Object.assign(new Error(error?.error?.message || error?.message || 'Request failed'), {
-      status: res.status,
-      code: error?.error?.code,
-      details: error?.error?.details,
-    });
+    const body = await res.json().catch(() => ({ message: res.statusText }));
+    throw new ApiError(
+      body?.error?.message || body?.message || 'Request failed',
+      res.status,
+      body?.error?.code,
+      body?.error?.details,
+    );
   }
 
   return res.json();
