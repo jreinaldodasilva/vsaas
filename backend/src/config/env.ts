@@ -170,7 +170,7 @@ export const validateEnv = (): void => {
   if (errors.length > 0) {
     logger.error('Environment configuration errors:');
     errors.forEach(e => logger.error(`  - ${e}`));
-    process.exit(1);
+    throw new Error(`Invalid environment configuration: ${errors.join('; ')}`);
   }
   if (warnings.length > 0) {
     logger.warn('Environment configuration warnings:');

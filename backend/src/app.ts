@@ -9,11 +9,9 @@ import pinoHttp from 'pino-http';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
-import { connectToDatabase } from './config/database/database';
 import { checkDatabaseConnection } from './middleware/database';
 import { errorHandler } from './middleware/errorHandler';
 import { csrfProtection, generateToken, mongoSanitization } from './middleware/security/security';
-import { validateEnv } from './config/env';
 import logger from './config/logger';
 import { responseWrapper } from './middleware/normalizeResponse';
 import { auditLogger } from './middleware/auditLogger';
@@ -25,7 +23,6 @@ import v1Routes from './routes/v1';
 import { resolveTenant, setTenantContext } from './platform/tenants';
 
 dotenv.config();
-validateEnv();
 
 const app: express.Application = express();
 
@@ -101,8 +98,6 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization', 'X-CSRF-Token', 'x-correlation-id', 'Idempotency-Key'],
 }));
-
-connectToDatabase();
 
 // ─── Rate Limiting ────────────────────────────────────────────────────────────
 app.use('/api/v1/contact', contactLimiter);

@@ -298,9 +298,9 @@ export { ${singular.toUpperCase()}_EVENTS } from './events/${singular}.events';
 export type { I${pascal}, Create${pascal}Dto, Update${pascal}Dto, ${pascal}Filters } from './types';
 `,
 
-  [`tests/unit/${singular}.service.test.ts`]: `import { TenantContext } from '../../platform/tenants/TenantContext';
+  [`tests/unit/${singular}.service.test.ts`]: `import { TenantContext } from '../../../../../platform/tenants/TenantContext';
 
-jest.mock('../../platform/events', () => ({
+jest.mock('../../../../../platform/events', () => ({
   eventBus: { emit: jest.fn().mockResolvedValue(undefined) },
 }));
 
@@ -312,11 +312,11 @@ const mockRepo = {
   softDeleteById: jest.fn(),
 };
 
-jest.mock('../repositories/${singular}.repository', () => ({
+jest.mock('../../repositories/${singular}.repository', () => ({
   ${pascal}Repository: jest.fn().mockImplementation(() => mockRepo),
 }));
 
-import { ${pascal}Service } from '../services/${singular}.service';
+import { ${pascal}Service } from '../../services/${singular}.service';
 
 describe('${pascal}Service', () => {
   let service: ${pascal}Service;
