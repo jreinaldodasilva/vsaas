@@ -170,7 +170,7 @@ const swaggerOptions = {
       },
     },
   },
-  apis: ['./src/routes/**/*.ts'],
+  apis: ['./src/routes/**/*.ts', './src/platform/**/routes/**/*.ts'],
 };
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerJsdoc(swaggerOptions)));
 

@@ -55,9 +55,9 @@ Make the boilerplate usable by teams and discoverable via API docs.
 
 | # | Item | Priority | Status |
 |---|------|----------|--------|
-| 13.1 | **Swagger/OpenAPI annotations** — Add `@swagger` JSDoc to auth, tenant, and webhook routes. | Low | ⬜ |
-| 13.2 | **Seed script** — `npm run seed` creates super_admin + demo tenant for local dev. | Low | ⬜ |
-| 13.3 | **Contributing guide** — `CONTRIBUTING.md` with module generation workflow, commit conventions, test requirements, PR checklist. | Low | ⬜ |
+| 13.1 | **Swagger/OpenAPI annotations** — Add `@swagger` JSDoc to auth, tenant, and webhook routes. | Low | ✅ |
+| 13.2 | **Seed script** — `npm run seed` creates super_admin + demo tenant for local dev. | Low | ✅ |
+| 13.3 | **Contributing guide** — `CONTRIBUTING.md` with module generation workflow, commit conventions, test requirements, PR checklist. | Low | ✅ |
 
 ---
 

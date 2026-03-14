@@ -27,6 +27,28 @@ const cookieOpts = (maxAge: number) => ({
   maxAge,
 });
 
+/**
+ * @swagger
+ * /api/v1/auth/register:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Register a new tenant and owner account
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [name, email, password, companyName]
+ *             properties:
+ *               name: { type: string, minLength: 2 }
+ *               email: { type: string, format: email }
+ *               password: { type: string, minLength: 8 }
+ *               companyName: { type: string, minLength: 2 }
+ *     responses:
+ *       201: { description: Tenant and user created, sets auth cookies }
+ *       409: { description: Email or slug already in use }
+ */
 router.post('/register', registerValidation, validateRequest, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const deviceInfo = {
@@ -46,6 +68,26 @@ router.post('/register', registerValidation, validateRequest, async (req: Reques
   }
 });
 
+/**
+ * @swagger
+ * /api/v1/auth/login:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Login with email and password
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, password]
+ *             properties:
+ *               email: { type: string, format: email }
+ *               password: { type: string }
+ *     responses:
+ *       200: { description: Login successful, sets auth cookies }
+ *       401: { description: Invalid credentials }
+ */
 router.post('/login', loginValidation, validateRequest, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const deviceInfo = {
@@ -85,6 +127,17 @@ router.post('/login', loginValidation, validateRequest, async (req: Request, res
   }
 });
 
+/**
+ * @swagger
+ * /api/v1/auth/me:
+ *   get:
+ *     tags: [Auth]
+ *     summary: Get current authenticated user
+ *     security: [{ cookieAuth: [] }]
+ *     responses:
+ *       200: { description: Current user data }
+ *       401: { description: Not authenticated }
+ */
 router.get('/me', authenticate, async (req: Request, res: Response, next: NextFunction) => {
   const authReq = req as AuthenticatedRequest;
   try {
@@ -94,6 +147,16 @@ router.get('/me', authenticate, async (req: Request, res: Response, next: NextFu
   } catch (error) { next(error); }
 });
 
+/**
+ * @swagger
+ * /api/v1/auth/refresh:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Refresh access token using refresh token cookie
+ *     responses:
+ *       200: { description: New tokens set in cookies }
+ *       401: { description: Invalid or expired refresh token }
+ */
 router.post('/refresh', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const refreshToken = req.cookies?.[REFRESH_COOKIE] || req.body.refreshToken;
@@ -106,6 +169,16 @@ router.post('/refresh', async (req: Request, res: Response, next: NextFunction) 
   } catch (error) { next(error); }
 });
 
+/**
+ * @swagger
+ * /api/v1/auth/logout:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Logout current session
+ *     security: [{ cookieAuth: [] }]
+ *     responses:
+ *       200: { description: Logged out successfully }
+ */
 router.post('/logout', authenticate, async (req: Request, res: Response, next: NextFunction) => {
   const authReq = req as AuthenticatedRequest;
   try {
@@ -135,6 +208,24 @@ router.patch('/change-password', authenticate, changePasswordValidation, validat
   } catch (error) { next(error); }
 });
 
+/**
+ * @swagger
+ * /api/v1/auth/forgot-password:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Request password reset email
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email]
+ *             properties:
+ *               email: { type: string, format: email }
+ *     responses:
+ *       200: { description: Reset email sent if account exists }
+ */
 router.post('/forgot-password', forgotPasswordValidation, validateRequest, async (req: Request, res: Response, next: NextFunction) => {
   try {
     await authService.forgotPassword(req.body.email);
@@ -142,6 +233,26 @@ router.post('/forgot-password', forgotPasswordValidation, validateRequest, async
   } catch (error) { next(error); }
 });
 
+/**
+ * @swagger
+ * /api/v1/auth/reset-password:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Reset password using token from email
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [token, newPassword]
+ *             properties:
+ *               token: { type: string }
+ *               newPassword: { type: string, minLength: 8 }
+ *     responses:
+ *       200: { description: Password reset successfully }
+ *       401: { description: Invalid or expired token }
+ */
 router.post('/reset-password', resetPasswordValidation, validateRequest, async (req: Request, res: Response, next: NextFunction) => {
   try {
     await authService.resetPasswordWithToken(req.body.token, req.body.newPassword);
@@ -149,6 +260,27 @@ router.post('/reset-password', resetPasswordValidation, validateRequest, async (
   } catch (error) { next(error); }
 });
 
+/**
+ * @swagger
+ * /api/v1/auth/accept-invite:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Accept a team invitation and create account
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [token, name, password]
+ *             properties:
+ *               token: { type: string }
+ *               name: { type: string, minLength: 2 }
+ *               password: { type: string, minLength: 8 }
+ *     responses:
+ *       201: { description: Account created, sets auth cookies }
+ *       401: { description: Invalid or expired invite }
+ */
 router.post('/accept-invite', acceptInviteValidation, validateRequest, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const deviceInfo = {

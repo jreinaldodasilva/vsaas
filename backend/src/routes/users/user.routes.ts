@@ -8,7 +8,21 @@ const router = Router();
 router.use(authenticate);
 router.use(authorize('super_admin', 'admin'));
 
-// List users in current tenant
+/**
+ * @swagger
+ * /api/v1/users:
+ *   get:
+ *     tags: [Users]
+ *     summary: List users in current tenant
+ *     security: [{ cookieAuth: [] }]
+ *     parameters:
+ *       - { in: query, name: search, schema: { type: string } }
+ *       - { in: query, name: role, schema: { type: string } }
+ *       - { in: query, name: page, schema: { type: integer, default: 1 } }
+ *       - { in: query, name: limit, schema: { type: integer, default: 10 } }
+ *     responses:
+ *       200: { description: Paginated user list }
+ */
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authReq = req as AuthenticatedRequest;
@@ -39,7 +53,19 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   } catch (error) { next(error); }
 });
 
-// Get user by ID
+/**
+ * @swagger
+ * /api/v1/users/{id}:
+ *   get:
+ *     tags: [Users]
+ *     summary: Get user by ID
+ *     security: [{ cookieAuth: [] }]
+ *     parameters:
+ *       - { in: path, name: id, required: true, schema: { type: string } }
+ *     responses:
+ *       200: { description: User data }
+ *       404: { description: User not found }
+ */
 router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authReq = req as AuthenticatedRequest;
@@ -52,7 +78,27 @@ router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   } catch (error) { next(error); }
 });
 
-// Update user role / deactivate
+/**
+ * @swagger
+ * /api/v1/users/{id}:
+ *   patch:
+ *     tags: [Users]
+ *     summary: Update user role or status
+ *     security: [{ cookieAuth: [] }]
+ *     parameters:
+ *       - { in: path, name: id, required: true, schema: { type: string } }
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               role: { type: string, enum: [admin, manager, staff] }
+ *               isActive: { type: boolean }
+ *               name: { type: string }
+ *     responses:
+ *       200: { description: Updated user }
+ */
 router.patch('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authReq = req as AuthenticatedRequest;
@@ -76,7 +122,18 @@ router.patch('/:id', async (req: Request, res: Response, next: NextFunction) => 
   } catch (error) { next(error); }
 });
 
-// Deactivate user (soft)
+/**
+ * @swagger
+ * /api/v1/users/{id}:
+ *   delete:
+ *     tags: [Users]
+ *     summary: Deactivate a user
+ *     security: [{ cookieAuth: [] }]
+ *     parameters:
+ *       - { in: path, name: id, required: true, schema: { type: string } }
+ *     responses:
+ *       204: { description: User deactivated }
+ */
 router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authReq = req as AuthenticatedRequest;
