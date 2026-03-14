@@ -1,6 +1,7 @@
 import { useState, FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { PasswordInput } from '../../components/UI';
 
 export function RegisterPage() {
   const navigate = useNavigate();
@@ -39,8 +40,15 @@ export function RegisterPage() {
           <input id="email" type="email" value={form.email} onChange={set('email')} required />
         </div>
         <div>
-          <label htmlFor="password">Senha</label>
-          <input id="password" type="password" value={form.password} onChange={set('password')} required minLength={8} />
+          <PasswordInput
+            id="password"
+            label="Senha"
+            value={form.password}
+            onChange={set('password')}
+            required
+            minLength={8}
+            showStrength
+          />
         </div>
         <div>
           <label htmlFor="companyName">Nome da empresa</label>

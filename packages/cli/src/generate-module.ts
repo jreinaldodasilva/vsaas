@@ -373,3 +373,77 @@ console.log(`  2. Register route in backend/src/routes/v1/index.ts:`);
 console.log(`     import { ${camel}Routes } from '../../modules/domain/${kebab}';`);
 console.log(`     router.use('/${kebab}', ${camel}Routes);`);
 console.log(`  3. Add types to packages/types/src/index.ts`);
+
+// ─── Frontend scaffolding ────────────────────────────────
+
+const frontendTemplates: Record<string, string> = {
+  [`src/services/api/${camel}Service.ts`]: `import { http } from '../http';
+import type { ApiResult, PaginatedData } from '@vsaas/types';
+
+const BASE = '/api/v1/${kebab}';
+
+export const ${camel}Service = {
+  list: (params?: Record<string, string | number | boolean | undefined>) =>
+    http.get<ApiResult<PaginatedData<any>>>(BASE, params),
+
+  getById: (id: string) =>
+    http.get<ApiResult<any>>(\`\${BASE}/\${id}\`),
+
+  create: (data: Record<string, unknown>) =>
+    http.post<ApiResult<any>>(BASE, data),
+
+  update: (id: string, data: Record<string, unknown>) =>
+    http.patch<ApiResult<any>>(\`\${BASE}/\${id}\`, data),
+
+  remove: (id: string) =>
+    http.delete<void>(\`\${BASE}/\${id}\`),
+};
+`,
+
+  [`src/hooks/use${pascal}.ts`]: `import { useApiQuery, useApiMutation } from './useApi';
+import { ${camel}Service } from '../services/api/${camel}Service';
+import type { PaginatedData, ApiResult } from '@vsaas/types';
+
+const KEYS = { all: ['${kebab}'] as const, detail: (id: string) => ['${kebab}', id] as const };
+
+export function use${pascal}List(params?: Record<string, string | number | boolean | undefined>) {
+  return useApiQuery<ApiResult<PaginatedData<any>>>(KEYS.all as unknown as string[], '/api/v1/${kebab}', params);
+}
+
+export function use${pascal}Detail(id: string) {
+  return useApiQuery<ApiResult<any>>(KEYS.detail(id) as unknown as string[], \`/api/v1/${kebab}/\${id}\`, undefined, { enabled: !!id });
+}
+
+export function useCreate${pascal}() {
+  return useApiMutation<ApiResult<any>, Record<string, unknown>>('post', '/api/v1/${kebab}', {
+    invalidateKeys: [KEYS.all as unknown as string[]],
+  });
+}
+
+export function useUpdate${pascal}() {
+  return useApiMutation<ApiResult<any>, { id: string } & Record<string, unknown>>(
+    'patch',
+    (vars) => \`/api/v1/${kebab}/\${vars.id}\`,
+    { invalidateKeys: [KEYS.all as unknown as string[]] },
+  );
+}
+
+export function useDelete${pascal}() {
+  return useApiMutation<void, string>(
+    'delete',
+    (id) => \`/api/v1/${kebab}/\${id}\`,
+    { invalidateKeys: [KEYS.all as unknown as string[]] },
+  );
+}
+`,
+};
+
+const projectRoot = path.resolve(process.cwd());
+for (const [filePath, content] of Object.entries(frontendTemplates)) {
+  const fullPath = path.join(projectRoot, filePath);
+  fs.mkdirSync(path.dirname(fullPath), { recursive: true });
+  fs.writeFileSync(fullPath, content, 'utf-8');
+  console.log(`  ✅ ${filePath}`);
+}
+
+console.log(`\n  Frontend files generated. Import hooks from src/hooks/use${pascal}.ts`);

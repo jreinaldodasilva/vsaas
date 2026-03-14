@@ -39,6 +39,21 @@ router.get('/',
 );
 
 // Get current tenant (any authenticated user)
+router.get('/me',
+  authenticate,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const authReq = req as AuthenticatedRequest;
+      if (!authReq.user?.tenantId) {
+        return res.status(400).json({ success: false, error: { message: 'Usuário não associado a um tenant' } });
+      }
+      const tenant = await tenantService.findById(authReq.user.tenantId);
+      res.json({ success: true, data: tenant });
+    } catch (error) { next(error); }
+  }
+);
+
+// @deprecated — use /me instead
 router.get('/current',
   authenticate,
   async (req: Request, res: Response, next: NextFunction) => {

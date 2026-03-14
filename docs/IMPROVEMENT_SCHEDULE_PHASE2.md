@@ -29,10 +29,10 @@ Patterns and hooks that every generated module will depend on.
 
 | # | Item | Priority | Status |
 |---|------|----------|--------|
-| 7.1 | **Add `useApiQuery` / `useApiMutation` hooks** — Generic React Query wrappers integrating with `http.ts`. Handle loading, error, and cache invalidation consistently. Place in `src/hooks/`. | Medium | ⬜ |
-| 7.2 | **Add `TenantContext` and `useTenant` hook** — Fetch tenant info (name, plan, features, settings) after login. Expose via context so components can check feature flags and plan limits. | Medium | ⬜ |
-| 7.3 | **Add `PasswordInput` component with strength indicator** — Reusable input with real-time validation feedback (min length, uppercase, number, special char). Use in registration and reset-password flows. | Medium | ⬜ |
-| 7.4 | **Extend CLI generator to scaffold frontend files** — Generate `src/services/api/<module>Service.ts` and `src/hooks/use<Module>.ts` (React Query CRUD hooks) alongside backend files. | Medium | ⬜ |
+| 7.1 | **Add `useApiQuery` / `useApiMutation` hooks** — Generic React Query wrappers integrating with `http.ts`. Handle loading, error, and cache invalidation consistently. Place in `src/hooks/`. | Medium | ✅ |
+| 7.2 | **Add `TenantContext` and `useTenant` hook** — Fetch tenant info (name, plan, features, settings) after login. Expose via context so components can check feature flags and plan limits. | Medium | ✅ |
+| 7.3 | **Add `PasswordInput` component with strength indicator** — Reusable input with real-time validation feedback (min length, uppercase, number, special char). Use in registration and reset-password flows. | Medium | ✅ |
+| 7.4 | **Extend CLI generator to scaffold frontend files** — Generate `src/services/api/<module>Service.ts` and `src/hooks/use<Module>.ts` (React Query CRUD hooks) alongside backend files. | Medium | ✅ |
 
 ---
 
