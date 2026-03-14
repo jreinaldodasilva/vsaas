@@ -1,12 +1,5 @@
 import { http } from '../http';
-import type { User, LoginRequest, Tenant } from '@vsaas/types';
-
-interface RegisterRequest {
-  name: string;
-  email: string;
-  password: string;
-  companyName: string;
-}
+import type { User, LoginRequest, Tenant, RegisterRequest } from '@vsaas/types';
 
 export const authService = {
   register: (data: RegisterRequest) =>

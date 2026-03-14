@@ -1,18 +1,16 @@
 // @vsaas/types — Shared types for the vertical SaaS platform
 
+// ─── API envelope ────────────────────────────────────────────────────────────
+
 export type ApiResult<T = any> = {
   success: boolean;
   data?: T;
   message?: string;
   error?: { code?: string; message: string; details?: any };
+  meta?: { timestamp: string; requestId: string; version: string };
 };
 
-export type Pagination = {
-  page?: number;
-  limit?: number;
-  total: number;
-  pages?: number;
-};
+// ─── Pagination ──────────────────────────────────────────────────────────────
 
 export type PaginatedData<T> = {
   items: T[];
@@ -24,118 +22,47 @@ export type PaginatedData<T> = {
   hasPrev: boolean;
 };
 
-export type User = {
-  id?: string;
-  _id?: string;
-  name: string;
-  email: string;
-  role: string;
-  tenantId?: string;
-  isActive?: boolean;
-  lastLogin?: string | Date;
-  mfaEnabled?: boolean;
-  phone?: string;
-  phoneVerified?: boolean;
-  emailVerified?: boolean;
-  passwordChangedAt?: Date;
-  passwordExpiresAt?: Date;
-  forcePasswordChange?: boolean;
-  createdAt?: string | Date;
-  updatedAt?: string | Date;
-  [key: string]: any;
-};
+// ─── Auth ────────────────────────────────────────────────────────────────────
 
 export type LoginRequest = {
   email: string;
   password: string;
 };
 
-export type LoginResponse = {
-  user: User;
-  accessToken: string;
-  refreshToken: string;
-  expiresIn: string;
-};
-
 export type RegisterRequest = {
   name: string;
   email: string;
   password: string;
-  tenant?: Record<string, any>;
+  companyName: string;
 };
 
-export type RefreshTokenRequest = { refreshToken: string };
-export type RefreshTokenResponse = {
-  accessToken: string;
-  refreshToken: string;
-  expiresIn: string;
+export type AcceptInviteRequest = {
+  token: string;
+  name: string;
+  password: string;
 };
 
-export type AuditLog = {
-  id?: string;
-  _id?: string;
-  user?: string | User;
-  action: 'login' | 'logout' | 'create' | 'read' | 'update' | 'delete' | 'failed_login' | 'authz_failure' | 'password_change' | 'mfa_setup' | 'mfa_disable' | 'export' | 'import';
-  resource: string;
-  resourceId?: string;
-  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-  path: string;
-  ipAddress: string;
-  userAgent?: string;
-  statusCode?: number;
-  changes?: { before?: any; after?: any };
-  metadata?: Record<string, any>;
+export type ChangePasswordRequest = {
+  currentPassword: string;
+  newPassword: string;
+};
+
+// ─── Core entities ───────────────────────────────────────────────────────────
+
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRoleType;
   tenantId?: string;
+  isActive?: boolean;
+  lastLogin?: string | Date;
   createdAt?: string | Date;
   updatedAt?: string | Date;
 };
-
-export type Session = {
-  id?: string;
-  _id?: string;
-  user: string | User;
-  refreshToken?: string;
-  deviceInfo: { userAgent: string; browser?: string; os?: string; device?: string };
-  ipAddress: string;
-  lastActivity: string | Date;
-  expiresAt: string | Date;
-  isActive: boolean;
-  createdAt?: string | Date;
-  updatedAt?: string | Date;
-};
-
-export type HealthStatus = {
-  timestamp: string;
-  uptime: number;
-  status: 'healthy' | 'degraded';
-  checks: {
-    database: { status: string; responseTime?: number };
-    redis: { status: string; responseTime?: number };
-  };
-};
-
-// ─── Status enums ────────────────────────────────────────────────────────────
-
-export const UserRole = {
-  SUPER_ADMIN: 'super_admin',
-  ADMIN: 'admin',
-  MANAGER: 'manager',
-  STAFF: 'staff',
-  // Add roles for your vertical here.
-} as const;
-
-export type UserRoleType = typeof UserRole[keyof typeof UserRole];
-
-// ─── Utility types ───────────────────────────────────────────────────────────
-
-export type ID = string;
-export type DateString = string;
-
-// ─── Domain types ───────────────────────────────────────────────────────────────────
 
 export type Tenant = {
-  id?: string;
-  _id?: string;
+  id: string;
   name: string;
   slug: string;
   domain?: string;
@@ -153,5 +80,50 @@ export type Tenant = {
   createdAt?: string | Date;
   updatedAt?: string | Date;
 };
+
+export type AuditLog = {
+  id: string;
+  user?: string;
+  action: string;
+  resource: string;
+  resourceId?: string;
+  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  path: string;
+  ipAddress: string;
+  userAgent?: string;
+  statusCode?: number;
+  changes?: { before?: any; after?: any };
+  metadata?: Record<string, any>;
+  tenantId?: string;
+  createdAt?: string | Date;
+};
+
+// ─── Health ──────────────────────────────────────────────────────────────────
+
+export type HealthStatus = {
+  status: 'healthy' | 'degraded';
+  timestamp: string;
+  uptime: number;
+  checks: {
+    database: { status: string; responseTime: number };
+    redis: { status: string; responseTime: number };
+  };
+};
+
+// ─── Roles ───────────────────────────────────────────────────────────────────
+
+export const UserRole = {
+  SUPER_ADMIN: 'super_admin',
+  ADMIN: 'admin',
+  MANAGER: 'manager',
+  STAFF: 'staff',
+} as const;
+
+export type UserRoleType = typeof UserRole[keyof typeof UserRole];
+
+// ─── Utility types ───────────────────────────────────────────────────────────
+
+export type ID = string;
+export type DateString = string;
 
 // Add types for generated modules below.
