@@ -3,8 +3,12 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   roots: ['<rootDir>/tests'],
+  transform: {
+    '^.+\\.ts$': ['ts-jest', { tsconfig: 'tsconfig.test.json' }],
+  },
   moduleNameMapper: {
     '^@vsaas/types$': '<rootDir>/../packages/types/src/index.ts',
+    '^uuid$': '<rootDir>/tests/mocks/uuid.ts',
   },
   setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
   coverageDirectory: 'coverage',

@@ -11,6 +11,16 @@ beforeAll(async () => {
 afterAll(async () => {
   await mongoose.disconnect();
   await mongod.stop();
+
+  // Close Redis and BullMQ to prevent open handles
+  try {
+    const redisClient = (await import('../src/config/database/redis')).default;
+    await redisClient.quit().catch(() => {});
+  } catch {}
+  try {
+    const { emailQueue } = await import('../src/queues/emailQueue');
+    await emailQueue.close().catch(() => {});
+  } catch {}
 });
 
 afterEach(async () => {

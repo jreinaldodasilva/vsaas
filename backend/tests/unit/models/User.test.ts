@@ -1,4 +1,4 @@
-import { User } from '../../src/models/User';
+import { User } from '../../../src/models/User';
 
 describe('User model', () => {
   it('creates a user with hashed password', async () => {
@@ -17,9 +17,9 @@ describe('User model', () => {
   });
 
   it('rejects duplicate email', async () => {
-    await User.create({ name: 'A', email: 'dup@example.com', password: 'Password123!', role: 'staff' });
+    await User.create({ name: 'User A', email: 'dup@example.com', password: 'Password123!', role: 'staff' });
     await expect(
-      User.create({ name: 'B', email: 'dup@example.com', password: 'Password123!', role: 'staff' })
+      User.create({ name: 'User B', email: 'dup@example.com', password: 'Password123!', role: 'staff' })
     ).rejects.toThrow();
   });
 });

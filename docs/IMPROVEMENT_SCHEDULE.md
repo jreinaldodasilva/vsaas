@@ -48,10 +48,10 @@ Items that improve production reliability and security.
 | # | Item | Priority | Status |
 |---|------|----------|--------|
 | 3.1 | **Replace `KEYS` with `SCAN` in `CacheService.invalidatePattern`** — `KEYS` is O(N) and blocks Redis. Use cursor-based `SCAN` iteration. | Medium | ⬜ |
-| 3.2 | **Add backend unit tests for tenant middleware** — `resolveTenant`, `setTenantContext`, `requireTenant` have zero test coverage. | Medium | ⬜ |
-| 3.3 | **Add backend unit tests for tenant service** — `TenantService` CRUD, resolve, suspend/reactivate have zero test coverage. | Medium | ⬜ |
-| 3.4 | **Fix pre-existing `User.test.ts` import path issue** — Broken import with ts-jest, unrelated to our changes but should be fixed. | Low | ⬜ |
-| 3.5 | **Fix `auth.test.ts` integration test** — Crashes due to `validateEnv` → `process.exit`. Will be unblocked by 1.1 + 1.2. | Medium | ⬜ |
+| 3.2 | **Add backend unit tests for tenant middleware** — `resolveTenant`, `setTenantContext`, `requireTenant` have zero test coverage. | Medium | ✅ |
+| 3.3 | **Add backend unit tests for tenant service** — `TenantService` CRUD, resolve, suspend/reactivate have zero test coverage. | Medium | ✅ |
+| 3.4 | **Fix pre-existing `User.test.ts` import path issue** — Broken import with ts-jest, unrelated to our changes but should be fixed. | Low | ✅ |
+| 3.5 | **Fix `auth.test.ts` integration test** — Crashes due to `validateEnv` → `process.exit`. Will be unblocked by 1.1 + 1.2. | Medium | ✅ |
 
 ---
 

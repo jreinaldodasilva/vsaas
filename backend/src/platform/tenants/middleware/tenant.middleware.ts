@@ -22,9 +22,11 @@ export const resolveTenant = async (req: Request, res: Response, next: NextFunct
     // 2. From header (used by super_admin or API clients)
     const tenantIdFromHeader = req.headers['x-tenant-id'] as string | undefined;
 
-    // 3. From subdomain
-    const hostParts = req.hostname.split('.');
-    const subdomain = hostParts.length > 2 ? hostParts[0] : undefined;
+    // 3. From subdomain (skip IP addresses and localhost)
+    const hostname = req.hostname;
+    const isIP = /^\d+\.\d+\.\d+\.\d+$/.test(hostname) || hostname === '[::1]';
+    const hostParts = hostname.split('.');
+    const subdomain = !isIP && hostParts.length > 2 ? hostParts[0] : undefined;
 
     const identifier = tenantIdFromToken || tenantIdFromHeader || subdomain;
 
